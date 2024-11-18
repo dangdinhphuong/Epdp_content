@@ -1,0 +1,41 @@
+@charset "utf-8";
+
+@media only screen and (max-width: 699px) and (min-width: 320px)  {
+  #collapsetable {
+    width:60%;
+    margin:50px 0 0 0;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 999px) and (min-width: 700px)  {
+  #collapsetable {
+    width:80%;
+    margin:50px 0 0 0;
+    text-align: center;
+  }
+}
+
+@media only screen and (max-width: 1179px) and (min-width: 1000px)  {
+  #collapsetable {
+      width:100%;
+      margin:50px 0 0 0;
+      text-align: center;
+  }
+}
+
+@media only screen and (max-width: 1299px) and (min-width: 1180px)  {
+  #collapsetable {
+      width:120%;
+      margin:50px 0 0 0;
+      text-align: center;
+  }
+}
+
+@media only screen and (min-width: 1300px) {
+  #collapsetable {
+      width:150%;
+      margin:50px 0 0 0;
+      text-align: center;
+  }
+}
