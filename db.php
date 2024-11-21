@@ -1,6 +1,7 @@
 <?php 
 
-$conn = new mysqli("localhost","root","","js-project");
+$conn = new mysqli("de1tmi3t63foh7fa.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","g2nmtk4tmxw1arle","dqdt4m07aujlte3y",
+    "n54b9y7jlhlgdgd6");
 
 function checkEmail($conn, $email){
     $sql = "SELECT * from user WHERE email = '$email'";

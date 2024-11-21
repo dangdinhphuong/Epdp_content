@@ -87,8 +87,9 @@ label{
     if(checkEmail($conn, $email)>0){
       echo '<script>alert("Registration failed!\nThis email is already registered!")</script>';
     }else{
+      $password =  base64_decode($pwd);
       $sql = "INSERT INTO `user`(`email`, `username`, `password`,`hp`,`credit`,`status`) 
-      VALUES ('$email','$name',PASSWORD('$pwd'),'$hp',0,1)";
+      VALUES ('$email','$name','$password' ,'$hp',0,1)";
 
       // echo ($sql);
       // echo $conn->query($sql)

@@ -30,7 +30,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `akt21` (
   `id` int(11) NOT NULL,
   `aktiviti` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `akt21`
@@ -166,7 +168,9 @@ CREATE TABLE `apm` (
   `id` int(11) NOT NULL,
   `apm` varchar(255) NOT NULL,
   `sub` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `apm`
@@ -192,7 +196,9 @@ CREATE TABLE `apn` (
   `id` int(11) NOT NULL,
   `apn` varchar(255) NOT NULL,
   `sub` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `apn`
@@ -210,7 +216,9 @@ INSERT INTO `apn` (`id`, `apn`, `sub`) VALUES
 CREATE TABLE `aspirasi` (
   `id` int(11) NOT NULL,
   `aspirasi` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `aspirasi`
@@ -234,7 +242,9 @@ CREATE TABLE `au` (
   `id` int(11) NOT NULL,
   `au` varchar(255) NOT NULL,
   `sub` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `au`
@@ -324,7 +334,9 @@ INSERT INTO `au` (`id`, `au`, `sub`) VALUES
 CREATE TABLE `bbm` (
   `id` int(11) NOT NULL,
   `bbm` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `bbm`
@@ -400,7 +412,9 @@ CREATE TABLE `calendar` (
   `pDate` date DEFAULT NULL,
   `minggu` int(11) NOT NULL,
   `penggal` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -445,7 +459,9 @@ CREATE TABLE `content` (
   `refleksi` varchar(255) NOT NULL,
   `inputRef` varchar(255) NOT NULL,
   `tsm` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -457,7 +473,9 @@ CREATE TABLE `cstd` (
   `id` int(11) NOT NULL,
   `cstd` varchar(255) NOT NULL,
   `sub` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `cstd`
@@ -493,7 +511,9 @@ INSERT INTO `cstd` (`id`, `cstd`, `sub`) VALUES
 CREATE TABLE `emk` (
   `id` int(11) NOT NULL,
   `emk` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `emk`
@@ -527,7 +547,9 @@ CREATE TABLE `kdg` (
   `id` int(11) NOT NULL,
   `kdg` varchar(255) NOT NULL,
   `sub` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `kdg`
@@ -551,7 +573,9 @@ INSERT INTO `kdg` (`id`, `kdg`, `sub`) VALUES
 CREATE TABLE `kemahiran` (
   `id` int(11) NOT NULL,
   `kemahiran` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `kemahiran`
@@ -575,7 +599,9 @@ CREATE TABLE `kk` (
   `id` int(11) NOT NULL,
   `kk` varchar(255) NOT NULL,
   `sub` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `kk`
@@ -611,7 +637,9 @@ INSERT INTO `kk` (`id`, `kk`, `sub`) VALUES
 CREATE TABLE `nilai` (
   `id` int(11) NOT NULL,
   `nilai` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `nilai`
@@ -656,7 +684,9 @@ CREATE TABLE `op` (
   `id` int(11) NOT NULL,
   `op` varchar(255) NOT NULL,
   `sub` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `op`
@@ -691,7 +721,9 @@ INSERT INTO `op` (`id`, `op`, `sub`) VALUES
 CREATE TABLE `p21` (
   `id` int(11) NOT NULL,
   `p21` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `p21`
@@ -722,7 +754,9 @@ INSERT INTO `p21` (`id`, `p21`) VALUES
 CREATE TABLE `pemikiran` (
   `id` int(11) NOT NULL,
   `pemikiran` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `pemikiran`
@@ -752,7 +786,9 @@ CREATE TABLE `period` (
   `start` varchar(255) NOT NULL,
   `end` varchar(255) NOT NULL,
   `noStu` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `period`
@@ -779,7 +815,9 @@ INSERT INTO `period` (`no`, `userId`, `day`, `std`, `sub`, `class`, `start`, `en
 CREATE TABLE `peta` (
   `id` int(11) NOT NULL,
   `peta` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `peta`
@@ -813,7 +851,9 @@ CREATE TABLE `preset` (
   `apm` varchar(255) NOT NULL,
   `au` varchar(255) NOT NULL,
   `apn` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `preset`
@@ -865,7 +905,9 @@ CREATE TABLE `refleksi` (
   `refleksi` varchar(255) NOT NULL,
   `sub` varchar(255) NOT NULL,
   `input` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `refleksi`
@@ -895,7 +937,9 @@ CREATE TABLE `subjects` (
   `id` int(11) NOT NULL,
   `name` varchar(225) NOT NULL,
   `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `subjects`
@@ -919,7 +963,9 @@ INSERT INTO `subjects` (`id`, `name`, `status`) VALUES
 CREATE TABLE `tahap` (
   `id` int(11) NOT NULL,
   `tahap` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tahap`
@@ -942,7 +988,9 @@ INSERT INTO `tahap` (`id`, `tahap`) VALUES
 CREATE TABLE `ujian` (
   `id` int(11) NOT NULL,
   `type` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `ujian`
@@ -975,8 +1023,10 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL,
   `hp` varchar(255) NOT NULL,
   `credit` int(11) NOT NULL,
-  `status` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `status` int(11) NOT NULL,
+,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoD DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user`

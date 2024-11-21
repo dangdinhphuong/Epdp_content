@@ -19,8 +19,9 @@
             if(checkEmail($conn, $email)>0){
                 $sql = "SELECT * FROM `user`";
             }else{
+                $password =  base64_encode('0000');
                 $sql = "INSERT INTO `user`(`email`, `username`, `password`,`hp`,`credit`,`status`) 
-                VALUES ('$email','$username',PASSWORD('0000'),'$hp','$credit','$status')";
+                VALUES ('$email','$username','$password','$hp','$credit','$status')";
                 $conn->query($sql);
                 echo "<br>".$sql."<br>";
             }

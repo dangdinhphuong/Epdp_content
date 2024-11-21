@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL); 
 session_start();
 require '../vendor/autoload.php';
 include '../db.php';
@@ -95,11 +98,10 @@ function importExcelFile($fileData, $conn)
             foreach ($cellIterator as $cell) {
                 $rowData[] = $cell->getValue();
             }
-
             // Lấy thông tin từ từng dòng
             $email = trim($rowData[0] ?? '');
             $username = trim($rowData[1] ?? '');
-            $hp = filter_var($rowData[2] ?? 0, '');
+            $hp = filter_var($rowData[2] ?? 0, FILTER_VALIDATE_INT);
             $credit = filter_var($rowData[3] ?? 0, FILTER_VALIDATE_INT);
             $status = filter_var($rowData[4] ?? 0, FILTER_VALIDATE_INT);
 
@@ -160,18 +162,19 @@ function importExcelFile($fileData, $conn)
 }
 
 // Xử lý POST request khi upload file
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES['excelFile'])) {
     $result = importExcelFile($_FILES['excelFile'], $conn);
 //var_dump($result['message']);die;
     // Kiểm tra kết quả trả về
     if ($result['status']) {
+        $password =  base64_encode('0000');
         $values = [];
         $sql = "INSERT INTO user (email, username, password, hp, credit, status) VALUES ";
         foreach ($result['data'] as $user) {
             $values[] = "(
         '{$user['email']}', 
         '{$user['username']}', 
-         PASSWORD('0000'),
+        '{$password}',
         {$user['hp']}, 
         {$user['credit']}, 
         {$user['status']}
@@ -234,8 +237,9 @@ if (isset($_POST["add"]) && !isset($_FILES['excelFile'])) {
             if (checkEmail($conn, $email) > 0) {
                 echo '<script>alert("This email is already registered !!");</script>';
             } else {
+                $password =  base64_encode('aaa');
                 $sql = "INSERT INTO `user`(`email`, `username`, `password`,`hp`,`credit`,`status`) 
-                    VALUES ('$email','$username',PASSWORD('0000'),'$hp','$credit','$status')";
+                    VALUES ('$email','$username','$password','$hp','$credit','$status')";
 
                 // echo ($sql);
                 // echo $conn->query($sql)
@@ -527,7 +531,7 @@ function readcsv($file)
         <h1>BULK ADD USERS WITH CSV</h1>
         <form enctype="multipart/form-data" action="" method="POST">
             <label for="add_file">Choose File :</label>
-            <input type="file" name="file" id="file" multiple onchange='javascript:this.form.submit()'><br><br>
+            <!-- <input type="file" name="file" id="file" multiple onchange='javascript:this.form.submit()'><br><br> -->
             <span style="color:red"><em>Just Allow CSV File</em></span>
         </form>
         <div class="show-csv" style="overflow-y:auto;">
