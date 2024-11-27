@@ -1,6 +1,13 @@
 <?php
-    // session_start();
+
     include 'db.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 1) {
+    header("Location: login.php");
+}
+
 ?>
 <html>
 <head>

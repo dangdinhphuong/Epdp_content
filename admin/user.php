@@ -1,8 +1,19 @@
+
 <?php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-error_reporting(E_ALL); 
-session_start();
+error_reporting(E_ALL);
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 2) {
+
+    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+$domain = $protocol . "://" . $_SERVER['HTTP_HOST'];
+$newPath = strstr($_SERVER['SCRIPT_NAME'], '/admin', true); // Cắt chuỗi từ đầu đến trước "admin"
+// Chuyển hướng đến login.php
+header("Location: $domain$newPath/login.php");
+}
 require '../vendor/autoload.php';
 include '../db.php';
 
@@ -167,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_FILES['excelFile'])) {
 //var_dump($result['message']);die;
     // Kiểm tra kết quả trả về
     if ($result['status']) {
-        $password =  base64_encode('0000');
+        $password = password_hash('0000', PASSWORD_BCRYPT);
         $values = [];
         $sql = "INSERT INTO user (email, username, password, hp, credit, status) VALUES ";
         foreach ($result['data'] as $user) {
@@ -237,7 +248,7 @@ if (isset($_POST["add"]) && !isset($_FILES['excelFile'])) {
             if (checkEmail($conn, $email) > 0) {
                 echo '<script>alert("This email is already registered !!");</script>';
             } else {
-                $password =  base64_encode('aaa');
+                $password = password_hash('0000', PASSWORD_BCRYPT);
                 $sql = "INSERT INTO `user`(`email`, `username`, `password`,`hp`,`credit`,`status`) 
                     VALUES ('$email','$username','$password','$hp','$credit','$status')";
 

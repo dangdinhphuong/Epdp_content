@@ -1,3 +1,11 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 1) {
+    header("Location: login.php");
+}
+?>
 <table>
 <html>
     <head>

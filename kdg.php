@@ -5,6 +5,7 @@ $sub = $_GET["sub"];
 $kdg = $_GET["kdg"];
 
 $sql = "SELECT * FROM `kdg` WHERE '$sub' = `sub`";
+var_dump($sql);die;
 $result = $conn->query($sql);
 // echo $kdg;
 $kdg = str_replace("<br>",",",$kdg);

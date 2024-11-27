@@ -97,7 +97,7 @@ label{
                 // $result = $conn->query($sql);
     
                     if($conn->query($sql)==TRUE){
-                      $password =  base64_decode($pwd);
+                    $password =  password_hash($pwd, PASSWORD_BCRYPT);
                     $sql1 = "UPDATE `user` SET `password`=  '$password' WHERE `email`='$email' ";                        
                     $conn->query($sql1);
                     echo '<script>alert("Your password successfully changed");</script>';

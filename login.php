@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -94,47 +96,52 @@ session_start();
         <h1 style="text-align:center">MyPDP</h1>
         <hr>
         <?php
-        if (isset($_POST["login"])) {
-            //get and set the input from user
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
             $email = $_POST['email'];
-            $pwd = $_POST["pwd"];
+            $password = $_POST['pwd'];
 
-            if ($email === "admin" && $pwd === ("admin")) {
-                header("Location:admin\user.php");
-            } elseif (checkEmail($conn, $email) > 0) {
-                $password = base64_encode($pwd);
-                $sql = "SELECT * from user WHERE email = '$email'AND password = '$password'";
-
-                $result = $conn->query($sql);
+            if (empty($email) || empty($password)) {
+                echo "Vui lòng nhập email và mật khẩu.";
+            } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                echo "Email không hợp lệ.";
+            } else {
+                // Kiểm tra thông tin đăng nhập
+                $sqlCheck = "SELECT * FROM user WHERE email = ?";
+                $stmt = $conn->prepare($sqlCheck);
+                $stmt->bind_param("s", $email);
+                $stmt->execute();
+                $result = $stmt->get_result();
 
                 if ($result->num_rows > 0) {
-                    $row = $result->fetch_assoc();
-                    if (empty($row["status"]) || $row["status"] != '1') {
-                        echo '<script>alert("Account has been locked!!");</script>';
-                        echo $conn->error;
+                    $user = $result->fetch_assoc();
+
+                    // Kiểm tra mật khẩu
+                    if (password_verify($password, $user['password'])) {
+                        echo "Đăng nhập thành công!";
+                        $_SESSION['user'] = $user;
+                        setcookie("id", $user["id"], time() + (86400));
+                        setcookie("username", $user["username"], time() + (86400));
+
+                        // Bắt đầu session hoặc thực hiện các tác vụ cần thiết
+                        if($user['role'] == 1){
+                            header("Location: selday.php");
+                        }
+                        else if($user['role'] == 2){
+                            header("Location: admin/user.php");
+                        }
+
                     } else {
-                        // print_r($row);
-                        $_SESSION['id'] = $row['id'];
-                        setcookie("id", $row["id"], time() + (86400));
-                        $_SESSION['username'] = $row['username'];
-                        setcookie("username", $row["username"], time() + (86400));
-                        // echo $_SESSION['username'];
-                        // echo $_COOKIE["username"];
-                        // print_r($row);
-                        header("Location:selday.php");
+                        echo "Sai mật khẩu.";
                     }
-
                 } else {
-                    echo '<script>alert("Email address or password no match!!");</script>';
-                    echo $conn->error;
+                    echo "Email không tồn tại.";
                 }
-            } else {
-                echo "The user does not exist. Please go to <a href='register.php'>register page</a>.";
+                $stmt->close();
             }
-
-
         }
         ?>
+
         <!-- <hr> -->
 
         <label for="email"><b>Email</b></label>

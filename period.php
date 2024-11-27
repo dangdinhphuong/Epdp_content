@@ -1,5 +1,12 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 1) {
+    header("Location: login.php");
+}
+?>
+<?php
     include 'db.php';
 $sql = "SELECT * FROM `subjects` WHERE `status` = 1  ";
 $result = $conn->query($sql);
@@ -11,6 +18,7 @@ while ($row = $result->fetch_assoc()) {
     $subjects[] = $row;  // Thêm bản ghi vào mảng
 }
 ?>
+
 <html>
 <head>
 <meta charset="UTF-8">

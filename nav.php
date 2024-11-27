@@ -1,5 +1,10 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
     session_start();
+}
+if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 1) {
+    header("Location: login.php");
+}
 ?>
 <b style="float:left; font-size:35px">MyPDP</b>
 

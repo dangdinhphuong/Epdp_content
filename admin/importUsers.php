@@ -1,4 +1,14 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 2) {
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
+$domain = $protocol . "://" . $_SERVER['HTTP_HOST'];
+$newPath = strstr($_SERVER['SCRIPT_NAME'], '/admin', true); // Cắt chuỗi từ đầu đến trước "admin"
+// Chuyển hướng đến login.php
+header("Location: $domain$newPath/login.php");
+}
 require 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -24,7 +34,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['excelFile'])) {
 
         // Hiển thị dữ liệu từ file Excel (dòng đầu tiên là tiêu đề)
         foreach ($rows as $index => $row) {
-            var_dump($row); die;
             if ($index === 0) continue; // Bỏ qua dòng tiêu đề
             $username = $row[0] ?? ''; // Cột 1
             $email = $row[1] ?? '';    // Cột 2
