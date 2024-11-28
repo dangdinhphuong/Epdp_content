@@ -5,7 +5,6 @@ $sub = $_GET["sub"];
 $kdg = $_GET["kdg"];
 
 $sql = "SELECT * FROM `kdg` WHERE '$sub' = `sub`";
-var_dump($sql);die;
 $result = $conn->query($sql);
 // echo $kdg;
 $kdg = str_replace("<br>",",",$kdg);
@@ -26,7 +25,6 @@ if($kdg>0){
         }
     }
 }
-var_dump($array);
 
 echo "<form method='POST' id='kdg'>";
     $i = 0;

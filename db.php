@@ -30,5 +30,4 @@ function checkEmailName($conn, $email, $name){
     return $result->num_rows;
 
 }
-
 ?>
