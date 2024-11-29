@@ -633,7 +633,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
             // Lấy dữ liệu từ các phần tử DOM
             fields.forEach(field => {
-                data[field] = $(`#${field}.input${result}`).text();
+                const content = $(`#${field}.input${result}`).html();
+                data[field] =  content.replace(/<br\s*\/?>/gi, '/n');
             });
 
             $.ajax({
@@ -1274,6 +1275,32 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
                     }
                 }
+                $.ajax({
+                    url: 'setToken.php',
+                    type: 'POST',
+                    data: {},
+                    success: function (response) {
+                        try {
+                            // Chuyển đổi chuỗi JSON thành đối tượng
+                            const data = JSON.parse(response);
+
+                            if (data.status === 'success') {
+                                // Hiển thị thông báo thành công với token mới
+                                alert(data.message + ' New Token: ' + data.newToken);
+                            } else {
+                                // Hiển thị thông báo lỗi
+                                alert(data.message);
+                            }
+                        } catch (e) {
+                            // Nếu có lỗi khi parse JSON, hiển thị lỗi
+                            alert('Error parsing response: ' + e.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // Hiển thị lỗi nếu yêu cầu AJAX không thành công
+                        alert('Error: ' + error);
+                    }
+                });
             });
         });
     </script>
