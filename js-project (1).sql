@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 27, 2024 at 11:50 AM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Hôte : 127.0.0.1
+-- Généré le : ven. 29 nov. 2024 à 16:50
+-- Version du serveur : 10.4.32-MariaDB
+-- Version de PHP : 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `js-project`
+-- Base de données : `js-project`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `akt21`
+-- Structure de la table `akt21`
 --
 
 CREATE TABLE `akt21` (
@@ -33,7 +33,7 @@ CREATE TABLE `akt21` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `akt21`
+-- Déchargement des données de la table `akt21`
 --
 
 INSERT INTO `akt21` (`id`, `aktiviti`) VALUES
@@ -159,7 +159,7 @@ INSERT INTO `akt21` (`id`, `aktiviti`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `apm`
+-- Structure de la table `apm`
 --
 
 CREATE TABLE `apm` (
@@ -169,7 +169,7 @@ CREATE TABLE `apm` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `apm`
+-- Déchargement des données de la table `apm`
 --
 
 INSERT INTO `apm` (`id`, `apm`, `sub`) VALUES
@@ -185,7 +185,7 @@ INSERT INTO `apm` (`id`, `apm`, `sub`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `apn`
+-- Structure de la table `apn`
 --
 
 CREATE TABLE `apn` (
@@ -195,7 +195,7 @@ CREATE TABLE `apn` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `apn`
+-- Déchargement des données de la table `apn`
 --
 
 INSERT INTO `apn` (`id`, `apn`, `sub`) VALUES
@@ -204,7 +204,7 @@ INSERT INTO `apn` (`id`, `apn`, `sub`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `aspirasi`
+-- Structure de la table `aspirasi`
 --
 
 CREATE TABLE `aspirasi` (
@@ -213,7 +213,7 @@ CREATE TABLE `aspirasi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `aspirasi`
+-- Déchargement des données de la table `aspirasi`
 --
 
 INSERT INTO `aspirasi` (`id`, `aspirasi`) VALUES
@@ -227,7 +227,7 @@ INSERT INTO `aspirasi` (`id`, `aspirasi`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `au`
+-- Structure de la table `au`
 --
 
 CREATE TABLE `au` (
@@ -237,7 +237,7 @@ CREATE TABLE `au` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `au`
+-- Déchargement des données de la table `au`
 --
 
 INSERT INTO `au` (`id`, `au`, `sub`) VALUES
@@ -318,7 +318,7 @@ INSERT INTO `au` (`id`, `au`, `sub`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bbm`
+-- Structure de la table `bbm`
 --
 
 CREATE TABLE `bbm` (
@@ -327,7 +327,7 @@ CREATE TABLE `bbm` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `bbm`
+-- Déchargement des données de la table `bbm`
 --
 
 INSERT INTO `bbm` (`id`, `bbm`) VALUES
@@ -385,7 +385,7 @@ INSERT INTO `bbm` (`id`, `bbm`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `calendar`
+-- Structure de la table `calendar`
 --
 
 CREATE TABLE `calendar` (
@@ -405,7 +405,7 @@ CREATE TABLE `calendar` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `content`
+-- Structure de la table `content`
 --
 
 CREATE TABLE `content` (
@@ -450,7 +450,7 @@ CREATE TABLE `content` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cstd`
+-- Structure de la table `cstd`
 --
 
 CREATE TABLE `cstd` (
@@ -460,7 +460,7 @@ CREATE TABLE `cstd` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `cstd`
+-- Déchargement des données de la table `cstd`
 --
 
 INSERT INTO `cstd` (`id`, `cstd`, `sub`) VALUES
@@ -487,7 +487,7 @@ INSERT INTO `cstd` (`id`, `cstd`, `sub`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `emk`
+-- Structure de la table `emk`
 --
 
 CREATE TABLE `emk` (
@@ -496,7 +496,7 @@ CREATE TABLE `emk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `emk`
+-- Déchargement des données de la table `emk`
 --
 
 INSERT INTO `emk` (`id`, `emk`) VALUES
@@ -520,7 +520,7 @@ INSERT INTO `emk` (`id`, `emk`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kdg`
+-- Structure de la table `kdg`
 --
 
 CREATE TABLE `kdg` (
@@ -530,7 +530,7 @@ CREATE TABLE `kdg` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `kdg`
+-- Déchargement des données de la table `kdg`
 --
 
 INSERT INTO `kdg` (`id`, `kdg`, `sub`) VALUES
@@ -545,7 +545,7 @@ INSERT INTO `kdg` (`id`, `kdg`, `sub`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kemahiran`
+-- Structure de la table `kemahiran`
 --
 
 CREATE TABLE `kemahiran` (
@@ -554,7 +554,7 @@ CREATE TABLE `kemahiran` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `kemahiran`
+-- Déchargement des données de la table `kemahiran`
 --
 
 INSERT INTO `kemahiran` (`id`, `kemahiran`) VALUES
@@ -568,7 +568,7 @@ INSERT INTO `kemahiran` (`id`, `kemahiran`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kk`
+-- Structure de la table `kk`
 --
 
 CREATE TABLE `kk` (
@@ -578,7 +578,7 @@ CREATE TABLE `kk` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `kk`
+-- Déchargement des données de la table `kk`
 --
 
 INSERT INTO `kk` (`id`, `kk`, `sub`) VALUES
@@ -605,7 +605,7 @@ INSERT INTO `kk` (`id`, `kk`, `sub`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `nilai`
+-- Structure de la table `nilai`
 --
 
 CREATE TABLE `nilai` (
@@ -614,7 +614,7 @@ CREATE TABLE `nilai` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `nilai`
+-- Déchargement des données de la table `nilai`
 --
 
 INSERT INTO `nilai` (`id`, `nilai`) VALUES
@@ -649,7 +649,7 @@ INSERT INTO `nilai` (`id`, `nilai`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `op`
+-- Structure de la table `op`
 --
 
 CREATE TABLE `op` (
@@ -659,7 +659,7 @@ CREATE TABLE `op` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `op`
+-- Déchargement des données de la table `op`
 --
 
 INSERT INTO `op` (`id`, `op`, `sub`) VALUES
@@ -685,7 +685,7 @@ INSERT INTO `op` (`id`, `op`, `sub`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `p21`
+-- Structure de la table `p21`
 --
 
 CREATE TABLE `p21` (
@@ -694,7 +694,7 @@ CREATE TABLE `p21` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `p21`
+-- Déchargement des données de la table `p21`
 --
 
 INSERT INTO `p21` (`id`, `p21`) VALUES
@@ -716,7 +716,7 @@ INSERT INTO `p21` (`id`, `p21`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `pemikiran`
+-- Structure de la table `pemikiran`
 --
 
 CREATE TABLE `pemikiran` (
@@ -725,7 +725,7 @@ CREATE TABLE `pemikiran` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `pemikiran`
+-- Déchargement des données de la table `pemikiran`
 --
 
 INSERT INTO `pemikiran` (`id`, `pemikiran`) VALUES
@@ -739,7 +739,7 @@ INSERT INTO `pemikiran` (`id`, `pemikiran`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `period`
+-- Structure de la table `period`
 --
 
 CREATE TABLE `period` (
@@ -755,7 +755,7 @@ CREATE TABLE `period` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `period`
+-- Déchargement des données de la table `period`
 --
 
 INSERT INTO `period` (`no`, `userId`, `day`, `std`, `sub`, `class`, `start`, `end`, `noStu`) VALUES
@@ -774,7 +774,7 @@ INSERT INTO `period` (`no`, `userId`, `day`, `std`, `sub`, `class`, `start`, `en
 -- --------------------------------------------------------
 
 --
--- Table structure for table `peta`
+-- Structure de la table `peta`
 --
 
 CREATE TABLE `peta` (
@@ -783,7 +783,7 @@ CREATE TABLE `peta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `peta`
+-- Déchargement des données de la table `peta`
 --
 
 INSERT INTO `peta` (`id`, `peta`) VALUES
@@ -799,7 +799,7 @@ INSERT INTO `peta` (`id`, `peta`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `preset`
+-- Structure de la table `preset`
 --
 
 CREATE TABLE `preset` (
@@ -817,7 +817,7 @@ CREATE TABLE `preset` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `preset`
+-- Déchargement des données de la table `preset`
 --
 
 INSERT INTO `preset` (`id`, `subject`, `tema`, `tajuk`, `kdg`, `cstd`, `op`, `kk`, `apm`, `au`, `apn`) VALUES
@@ -858,7 +858,7 @@ INSERT INTO `preset` (`id`, `subject`, `tema`, `tajuk`, `kdg`, `cstd`, `op`, `kk
 -- --------------------------------------------------------
 
 --
--- Table structure for table `refleksi`
+-- Structure de la table `refleksi`
 --
 
 CREATE TABLE `refleksi` (
@@ -869,7 +869,7 @@ CREATE TABLE `refleksi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `refleksi`
+-- Déchargement des données de la table `refleksi`
 --
 
 INSERT INTO `refleksi` (`id`, `refleksi`, `sub`, `input`) VALUES
@@ -889,7 +889,7 @@ INSERT INTO `refleksi` (`id`, `refleksi`, `sub`, `input`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `subjects`
+-- Structure de la table `subjects`
 --
 
 CREATE TABLE `subjects` (
@@ -899,7 +899,7 @@ CREATE TABLE `subjects` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `subjects`
+-- Déchargement des données de la table `subjects`
 --
 
 INSERT INTO `subjects` (`id`, `name`, `status`) VALUES
@@ -914,7 +914,7 @@ INSERT INTO `subjects` (`id`, `name`, `status`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tahap`
+-- Structure de la table `tahap`
 --
 
 CREATE TABLE `tahap` (
@@ -923,7 +923,7 @@ CREATE TABLE `tahap` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `tahap`
+-- Déchargement des données de la table `tahap`
 --
 
 INSERT INTO `tahap` (`id`, `tahap`) VALUES
@@ -937,7 +937,7 @@ INSERT INTO `tahap` (`id`, `tahap`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ujian`
+-- Structure de la table `ujian`
 --
 
 CREATE TABLE `ujian` (
@@ -946,7 +946,7 @@ CREATE TABLE `ujian` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `ujian`
+-- Déchargement des données de la table `ujian`
 --
 
 INSERT INTO `ujian` (`id`, `type`) VALUES
@@ -966,7 +966,7 @@ INSERT INTO `ujian` (`id`, `type`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Structure de la table `user`
 --
 
 CREATE TABLE `user` (
@@ -982,7 +982,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `user`
+-- Déchargement des données de la table `user`
 --
 
 INSERT INTO `user` (`id`, `email`, `username`, `password`, `hp`, `credit`, `status`, `role`, `token`) VALUES
@@ -992,303 +992,303 @@ INSERT INTO `user` (`id`, `email`, `username`, `password`, `hp`, `credit`, `stat
 (27, '111@gmail.com', '111', '$2y$10$q6tJp8srfXBxAkrFLw38zObPEDYfzEgKz0rAwmyWBkS5n1DVHxY6W', '11111', 300, 1, 1, 365);
 
 --
--- Indexes for dumped tables
+-- Index pour les tables déchargées
 --
 
 --
--- Indexes for table `akt21`
+-- Index pour la table `akt21`
 --
 ALTER TABLE `akt21`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `apm`
+-- Index pour la table `apm`
 --
 ALTER TABLE `apm`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `apn`
+-- Index pour la table `apn`
 --
 ALTER TABLE `apn`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `aspirasi`
+-- Index pour la table `aspirasi`
 --
 ALTER TABLE `aspirasi`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `au`
+-- Index pour la table `au`
 --
 ALTER TABLE `au`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `bbm`
+-- Index pour la table `bbm`
 --
 ALTER TABLE `bbm`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `calendar`
+-- Index pour la table `calendar`
 --
 ALTER TABLE `calendar`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `content`
+-- Index pour la table `content`
 --
 ALTER TABLE `content`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `cstd`
+-- Index pour la table `cstd`
 --
 ALTER TABLE `cstd`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `emk`
+-- Index pour la table `emk`
 --
 ALTER TABLE `emk`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `kdg`
+-- Index pour la table `kdg`
 --
 ALTER TABLE `kdg`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `kemahiran`
+-- Index pour la table `kemahiran`
 --
 ALTER TABLE `kemahiran`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `kk`
+-- Index pour la table `kk`
 --
 ALTER TABLE `kk`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `nilai`
+-- Index pour la table `nilai`
 --
 ALTER TABLE `nilai`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `op`
+-- Index pour la table `op`
 --
 ALTER TABLE `op`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `p21`
+-- Index pour la table `p21`
 --
 ALTER TABLE `p21`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `pemikiran`
+-- Index pour la table `pemikiran`
 --
 ALTER TABLE `pemikiran`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `period`
+-- Index pour la table `period`
 --
 ALTER TABLE `period`
   ADD PRIMARY KEY (`no`);
 
 --
--- Indexes for table `peta`
+-- Index pour la table `peta`
 --
 ALTER TABLE `peta`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `preset`
+-- Index pour la table `preset`
 --
 ALTER TABLE `preset`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `refleksi`
+-- Index pour la table `refleksi`
 --
 ALTER TABLE `refleksi`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `subjects`
+-- Index pour la table `subjects`
 --
 ALTER TABLE `subjects`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tahap`
+-- Index pour la table `tahap`
 --
 ALTER TABLE `tahap`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `ujian`
+-- Index pour la table `ujian`
 --
 ALTER TABLE `ujian`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `user`
+-- Index pour la table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- AUTO_INCREMENT for table `akt21`
+-- AUTO_INCREMENT pour la table `akt21`
 --
 ALTER TABLE `akt21`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
--- AUTO_INCREMENT for table `apm`
+-- AUTO_INCREMENT pour la table `apm`
 --
 ALTER TABLE `apm`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `apn`
+-- AUTO_INCREMENT pour la table `apn`
 --
 ALTER TABLE `apn`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `aspirasi`
+-- AUTO_INCREMENT pour la table `aspirasi`
 --
 ALTER TABLE `aspirasi`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `au`
+-- AUTO_INCREMENT pour la table `au`
 --
 ALTER TABLE `au`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
--- AUTO_INCREMENT for table `bbm`
+-- AUTO_INCREMENT pour la table `bbm`
 --
 ALTER TABLE `bbm`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
--- AUTO_INCREMENT for table `calendar`
+-- AUTO_INCREMENT pour la table `calendar`
 --
 ALTER TABLE `calendar`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `content`
+-- AUTO_INCREMENT pour la table `content`
 --
 ALTER TABLE `content`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `cstd`
+-- AUTO_INCREMENT pour la table `cstd`
 --
 ALTER TABLE `cstd`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT for table `emk`
+-- AUTO_INCREMENT pour la table `emk`
 --
 ALTER TABLE `emk`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
--- AUTO_INCREMENT for table `kdg`
+-- AUTO_INCREMENT pour la table `kdg`
 --
 ALTER TABLE `kdg`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `kemahiran`
+-- AUTO_INCREMENT pour la table `kemahiran`
 --
 ALTER TABLE `kemahiran`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `kk`
+-- AUTO_INCREMENT pour la table `kk`
 --
 ALTER TABLE `kk`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
--- AUTO_INCREMENT for table `nilai`
+-- AUTO_INCREMENT pour la table `nilai`
 --
 ALTER TABLE `nilai`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
--- AUTO_INCREMENT for table `op`
+-- AUTO_INCREMENT pour la table `op`
 --
 ALTER TABLE `op`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `p21`
+-- AUTO_INCREMENT pour la table `p21`
 --
 ALTER TABLE `p21`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- AUTO_INCREMENT for table `pemikiran`
+-- AUTO_INCREMENT pour la table `pemikiran`
 --
 ALTER TABLE `pemikiran`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `period`
+-- AUTO_INCREMENT pour la table `period`
 --
 ALTER TABLE `period`
   MODIFY `no` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT for table `peta`
+-- AUTO_INCREMENT pour la table `peta`
 --
 ALTER TABLE `peta`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT for table `refleksi`
+-- AUTO_INCREMENT pour la table `refleksi`
 --
 ALTER TABLE `refleksi`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `subjects`
+-- AUTO_INCREMENT pour la table `subjects`
 --
 ALTER TABLE `subjects`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `tahap`
+-- AUTO_INCREMENT pour la table `tahap`
 --
 ALTER TABLE `tahap`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
--- AUTO_INCREMENT for table `ujian`
+-- AUTO_INCREMENT pour la table `ujian`
 --
 ALTER TABLE `ujian`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT for table `user`
+-- AUTO_INCREMENT pour la table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
