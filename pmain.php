@@ -98,11 +98,10 @@ if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 1) {
         echo '<script>alert("Please set the period for this day")</script>';
         echo '<script>window.location.href="process.php"</script>';
     } elseif ($result->num_rows > 0) {
+
         for ($i = 0; $i < $result->num_rows; $i++) {
             $row = $result->fetch_assoc();
-            // print_r($result->num_rows);
             // echo $row["sub"];
-
             ?>
 
             <div class="container pt-5 pb-3">
@@ -584,9 +583,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             // console.log("tema" + result); 
             let tema = document.querySelector('#tema.input' + result);
             tema.innerHTML = a;
-            setTimeout(() => {
-                suggest(formData);
-            }, 0); // Chạy sau vòng lặp hiện tại;
+            // setTimeout(() => {
+            //     suggest(formData);
+            // }, 0); // Chạy sau vòng lặp hiện tại;
         }
 
         for (let i = 0; i < tajuk.length; i++) {
@@ -623,9 +622,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             let taj = document.querySelector('#tajuk.input' + result);
 
             taj.innerHTML = a;
-            setTimeout(() => {
-                suggest(formData);
-            }, 0); // Chạy sau vòng lặp hiện tại;
+            // setTimeout(() => {
+            //     suggest(formData);
+            // }, 0); // Chạy sau vòng lặp hiện tại;
         }
 
         function suggest(formData) {
@@ -742,10 +741,10 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             let separator = "<br>";
             let kandungan = a.join(separator);
             // console.log(kandungan);
-            kdg.innerHTML = kandungan;
-            setTimeout(() => {
-                suggest(formData);
-            }, 0); // Chạy sau vòng lặp hiện tại
+             kdg.innerHTML = kandungan;
+            // setTimeout(() => {
+            //     suggest(formData);
+            // }, 0); // Chạy sau vòng lặp hiện tại
         }
 
 

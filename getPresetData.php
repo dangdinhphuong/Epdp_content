@@ -55,7 +55,7 @@ $sql = "SELECT * FROM preset";
 if (count($conditions) > 0) {
     $sql .= " WHERE " . implode(" AND ", $conditions);
 }
-
+var_dump($sql,$parameters);die;
 // Sử dụng prepared statement để tránh SQL Injection
 $stmt = $conn->prepare($sql);
 
