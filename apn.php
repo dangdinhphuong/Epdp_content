@@ -4,7 +4,7 @@ include("db.php");
 $sub = $_GET["sub"];
 $apn = $_GET["apn"];
 
-$sql = "SELECT * FROM `apn` WHERE '$sub' = `sub`";
+$sql = "SELECT * FROM `apn`";
 $result = $conn->query($sql);
 
 $array = explode(" ",$apn);

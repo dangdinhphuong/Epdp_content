@@ -4,7 +4,7 @@ include("db.php");
 $sub = $_GET["sub"];
 $apm = $_GET["apm"];
 
-$sql = "SELECT * FROM `apm` WHERE '$sub' = `sub`";
+$sql = "SELECT * FROM `apm`";
 $result = $conn->query($sql);
 
 $array = explode(" ",$apm);

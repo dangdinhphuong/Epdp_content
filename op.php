@@ -4,7 +4,7 @@ include("db.php");
 $sub = $_GET["sub"];
 $op = $_GET["op"];
 
-$sql = "SELECT * FROM `op` WHERE '$sub' = `sub`";
+$sql = "SELECT * FROM `op` ";
 $result = $conn->query($sql);
 // echo "op".$op;
 // echo(gettype($op));

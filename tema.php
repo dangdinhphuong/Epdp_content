@@ -2,7 +2,7 @@
 include("db.php");
 
 $sub = $_GET["sub"];
-$sql = "SELECT DISTINCT `tema` FROM `preset` WHERE '$sub' = `subject` ";
+$sql = "SELECT  `tema` FROM `preset`";
 $result = $conn->query($sql);
 
 echo "<form id='tema'>";

@@ -4,7 +4,7 @@ include("db.php");
 $sub = $_GET["sub"];
 $kdg = $_GET["kdg"];
 
-$sql = "SELECT * FROM `kdg` WHERE '$sub' = `sub`";
+$sql = "SELECT * FROM `kdg` ";
 $result = $conn->query($sql);
 // echo $kdg;
 $kdg = str_replace("<br>",",",$kdg);

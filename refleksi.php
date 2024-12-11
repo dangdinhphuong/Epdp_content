@@ -4,7 +4,7 @@ include("db.php");
 $sub = $_GET["sub"];
 $refleksi = $_GET["refleksi"];
 
-$sql = "SELECT * FROM `refleksi` WHERE '$sub' = `sub`";
+$sql = "SELECT * FROM `refleksi` ";
 $result = $conn->query($sql);
 
 $array = explode(" ",$refleksi);
