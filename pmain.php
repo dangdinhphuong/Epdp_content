@@ -578,9 +578,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         // console.log("tema" + result);
         let tema = document.querySelector('#tema.input' + result);
         tema.innerHTML = a;
-        // setTimeout(() => {
-        //     suggest(formData);
-        // }, 0); // Chạy sau vòng lặp hiện tại;
+        setTimeout(() => {
+            suggest(formData, false);
+        }, 0); // Chạy sau vòng lặp hiện tại;
     }
 
     for (let i = 0; i < tajuk.length; i++) {
@@ -617,20 +617,26 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let taj = document.querySelector('#tajuk.input' + result);
 
         taj.innerHTML = a;
-        // setTimeout(() => {
-        //     suggest(formData);
-        // }, 0); // Chạy sau vòng lặp hiện tại;
+        setTimeout(() => {
+            suggest(formData, false);
+        }, 0); // Chạy sau vòng lặp hiện tại;
     }
 
-    function suggest(formData) {
+    function suggest(formData, show = true) {
         let fields = ['tajuk', 'tema', 'kdg', 'cstd', 'op', 'kk', 'apm', 'au', 'apn'];
         let data = {};
 
         // Lấy dữ liệu từ các phần tử DOM
         fields.forEach(field => {
-            const content = $(`#${field}.input${result}`).html();
-            data[field] = content.replace(/<br\s*\/?>/gi, '/n');
+            console.log(data);
+            let content = $(`#${field}.input${result}`).html(); // Sử dụng let thay cho const
+
+            // if (content === null || content === undefined || content =='') {
+            //     content = $(`#${field}-sp${result}`).html();
+            // }
+            data[field] = content ? content.replace(/<br\s*\/?>/gi, '/n') : ''; // Đảm bảo content không null trước khi replace
         });
+
 
         $.ajax({
             type: "POST",
@@ -638,52 +644,54 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             data: data,
             success: function (response) {
                 response = JSON.parse(response);
-
-                // Xóa các thẻ <span> đã tạo trước đó
-                fields.forEach(field => {
-                    let element = document.querySelector(`#${field}.input${result}`);
-                    if (element) {
-                        element.querySelectorAll(`span[id^="${field}-sp"]`).forEach(span => span.remove());
-                    }
-                });
-                if (response.length >= 1) {
-                    // Nếu có dữ liệu trả về, hiển thị nội dung mới vào <span> nếu chưa có dữ liệu
-                    response.forEach(record => {
-                        fields.forEach(field => {
-                            if (record[field]) {
-                                $(`#${field}-sp${result}`).remove();
-                                let element = document.querySelector(`#${field}.input${result}`);
-                                if (element && data[field] == '') {
-
-                                    // Format nội dung
-                                    let formattedText = record[field].replace(/\r\n/g, '<br>');
-
-                                    // Kiểm tra xem nội dung đã tồn tại chưa
-                                    let existingSpans = Array.from(element.parentNode.querySelectorAll(`span[id^="${field}-sp"]`));
-                                    let contentExists = existingSpans.some(span => span.innerHTML === formattedText);
-
-                                    if (!contentExists) {
-                                        // Tạo một thẻ <span> mới nếu nội dung chưa tồn tại
-                                        let span = document.createElement('span');
-                                        span.id = `${field}-sp${result}`;
-                                        span.innerHTML = formattedText;
-
-                                        // Gắn <span> cùng cấp với element
-                                        element.parentNode.insertBefore(span, element.nextSibling);
-                                    }
-                                } else if (data[field] != '') {
-                                    let existingSpans = Array.from(element.parentNode.querySelectorAll(`span[id^="${field}-sp${result}"]`));
-                                    existingSpans.forEach(span => span.remove());
-                                }
-                            }
-                        });
-                    });
-                } else {
-                    // Nếu không có dữ liệu trả về, xóa các thẻ <span> đã tạo trước đó
+                console.log('show',show )
+                if (show) {
+                    // Xóa các thẻ <span> đã tạo trước đó
                     fields.forEach(field => {
-
-                        $(`#${field}-sp${result}`).remove();
+                        let element = document.querySelector(`#${field}.input${result}`);
+                        if (element) {
+                            element.querySelectorAll(`span[id^="${field}-sp"]`).forEach(span => span.remove());
+                        }
                     });
+                    if (response.length >= 1) {
+                        // Nếu có dữ liệu trả về, hiển thị nội dung mới vào <span> nếu chưa có dữ liệu
+                        response.forEach(record => {
+                            fields.forEach(field => {
+                                if (record[field]) {
+                                    $(`#${field}-sp${result}`).remove();
+                                    let element = document.querySelector(`#${field}.input${result}`);
+                                    if (element && data[field] == '') {
+
+                                        // Format nội dung
+                                        let formattedText = record[field].replace(/\r\n/g, '<br>');
+
+                                        // Kiểm tra xem nội dung đã tồn tại chưa
+                                        let existingSpans = Array.from(element.parentNode.querySelectorAll(`span[id^="${field}-sp"]`));
+                                        let contentExists = existingSpans.some(span => span.innerHTML === formattedText);
+
+                                        if (!contentExists) {
+                                            // Tạo một thẻ <span> mới nếu nội dung chưa tồn tại
+                                            let span = document.createElement('span');
+                                            span.id = `${field}-sp${result}`;
+                                            span.innerHTML = formattedText;
+
+                                            // Gắn <span> cùng cấp với element
+                                            element.parentNode.insertBefore(span, element.nextSibling);
+                                        }
+                                    } else if (data[field] != '') {
+                                        let existingSpans = Array.from(element.parentNode.querySelectorAll(`span[id^="${field}-sp${result}"]`));
+                                        existingSpans.forEach(span => span.remove());
+                                    }
+                                }
+                            });
+                        });
+                    } else {
+                        // Nếu không có dữ liệu trả về, xóa các thẻ <span> đã tạo trước đó
+                        fields.forEach(field => {
+
+                            $(`#${field}-sp${result}`).remove();
+                        });
+                    }
                 }
             }
         });
@@ -738,9 +746,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let kandungan = a.join(separator);
         // console.log(kandungan);
         kdg.innerHTML = kandungan;
-        // setTimeout(() => {
-        //     suggest(formData);
-        // }, 0); // Chạy sau vòng lặp hiện tại
+        setTimeout(() => {
+            suggest(formData,false);
+        }, 0); // Chạy sau vòng lặp hiện tại
     }
 
 
@@ -1352,7 +1360,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 data: {},
                 success: function (response) {
                     try {
-                        window.location.href="process.php"
+                        window.location.href = "process.php"
                     } catch (e) {
                         // Nếu có lỗi khi parse JSON, hiển thị lỗi
                         alert('Error parsing response: ' + e.message);

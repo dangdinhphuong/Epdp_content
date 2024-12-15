@@ -20,7 +20,6 @@ $id = (int)$_COOKIE["id"] ?? 1;
 $sqlUpdate = "UPDATE `period`
               SET `status` = 1
               WHERE userId = '$id' AND `day` = '$day' AND `status` = 0";
-var_dump($sqlUpdate);die;
 // Thực thi câu lệnh cập nhật
 if ($conn->query($sqlUpdate) === TRUE) {
     echo json_encode(['status' => 'success', 'message' => 'Cập nhật thành công!']);

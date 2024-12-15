@@ -4,8 +4,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 if (empty($_SESSION['user']) || $_SESSION['user']['role'] != 1) {
-    return 'login required !';
+    echo json_encode(['error' => 'Login required!']);
+    exit;
 }
+
 // Mảng chứa điều kiện và tham số
 $conditions = [];
 $parameters = [];
@@ -38,10 +40,10 @@ if (!empty($parameters)) {
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Lấy dữ liệu và trả về JSON
+// Lấy dữ liệu và lưu vào session
 $rows = $result->fetch_all(MYSQLI_ASSOC);
-
 if (!empty($rows)) {
+    $_SESSION['preset_data'] = $rows; // Lưu dữ liệu vào session
     echo json_encode($rows);
 } else {
     echo json_encode(["error" => "No data found"]);
