@@ -644,7 +644,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             data: data,
             success: function (response) {
                 response = JSON.parse(response);
-                console.log('show',show )
+                console.log('show', show)
                 if (show) {
                     // Xóa các thẻ <span> đã tạo trước đó
                     fields.forEach(field => {
@@ -747,7 +747,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         // console.log(kandungan);
         kdg.innerHTML = kandungan;
         setTimeout(() => {
-            suggest(formData,false);
+            suggest(formData, false);
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -843,11 +843,14 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         // console.log(a);
         // console.log("op" + result);
         let op = document.querySelector('#op.input' + result);
+
         let separator = "<br>";
         let obj = a.join(separator);
         // console.log(obj);
         op.innerHTML = obj;
+        $('#op-sp' + result).text('');
         setTimeout(() => {
+            $('#op-sp' + result).text('');
             suggest(formData);
         }, 0); // Chạy sau vòng lặp hiện tại
     }
