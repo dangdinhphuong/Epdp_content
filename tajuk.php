@@ -27,12 +27,13 @@ for ($a = 0; $a < $result->num_rows; $a++) {
     }
 
     // In ra radio button và trạng thái
-    echo "<input style='margin:20px 0 0 20px' type='radio' name='tajuk' value='" . htmlspecialchars($currentTajuk) . "'>";
-    echo "<span style='margin-left: 20px'>" . htmlspecialchars($currentTajuk) . "</span>";
+
     if ($found) {
-        echo " <img src='./check-mark.png' style='width: 25px'>";
+        echo "<input style='margin:20px 0 0 20px' type='radio' name='tajuk' value='" . htmlspecialchars($currentTajuk) . "'>";
+        echo "<span style='margin-left: 20px'>" . htmlspecialchars($currentTajuk) . "</span>";
+        echo "<br><br>";
     }
-    echo "<br><br>";
+
 }
 
 echo "<input style='margin:10px 0 10px 20px' name='submit' type='submit' value='SUBMIT'>";

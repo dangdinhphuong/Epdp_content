@@ -41,16 +41,18 @@ echo "<form method='POST' id='apn'>";
             }
         }
 
-        if(in_array($row["apn"],$newArray)){
-            echo"<input style='margin:20px 0 0 20px' checked type='checkbox' name='apn' value='".$row['apn']."'><span style='margin-left: 20px'>".$row['apn']."</span>>";
-            $i++;
-        }else{
-            echo"<input style='margin:20px 0 0 20px' type='checkbox' name='apn' value='".$row['apn']."'><span style='margin-left: 20px'>".$row['apn']."</span>";
-        }
+
         if ($found) {
+            if(in_array($row["apn"],$newArray)){
+                echo"<input style='margin:20px 0 0 20px' checked type='checkbox' name='apn' value='".$row['apn']."'><span style='margin-left: 20px'>".$row['apn']."</span>>";
+                $i++;
+            }else{
+                echo"<input style='margin:20px 0 0 20px' type='checkbox' name='apn' value='".$row['apn']."'><span style='margin-left: 20px'>".$row['apn']."</span>";
+            }
             echo " <img src='./check-mark.png' style='width: 25px'>";
+            echo "<br><br>";
         }
-        echo "<br><br>";
+
     }
 
 echo "<input style='margin:10px 0 10px 20px' name='submit' type='submit' value='SUBMIT'>";

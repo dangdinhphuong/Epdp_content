@@ -48,16 +48,18 @@ echo "<form method='POST' id='kdg'>";
             }
         }
 
-        if(in_array($row["kdg"],$array)){
-            echo"<input style='margin:20px 0 0 20px' checked type='checkbox' name='kdg' value='".$row['kdg']."'><span style='margin-left: 20px'>".$row['kdg']."</span>";
-            $i++;
-        }else{
-            echo"<input style='margin:20px 0 0 20px' type='checkbox' name='kdg' value='".$row['kdg']."'><span style='margin-left: 20px'>".$row['kdg']."</span>";
-        }
+
         if ($found) {
+            if(in_array($row["kdg"],$array)){
+                echo"<input style='margin:20px 0 0 20px' checked type='checkbox' name='kdg' value='".$row['kdg']."'><span style='margin-left: 20px'>".$row['kdg']."</span>";
+                $i++;
+            }else{
+                echo"<input style='margin:20px 0 0 20px' type='checkbox' name='kdg' value='".$row['kdg']."'><span style='margin-left: 20px'>".$row['kdg']."</span>";
+            }
             echo " <img src='./check-mark.png' style='width: 25px'>";
+            echo "<br><br>";
         }
-        echo "<br><br>";
+
     }
 
 echo "<input style='margin:10px 0 10px 20px' name='submit' type='submit' value='SUBMIT'>";

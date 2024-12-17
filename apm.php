@@ -40,16 +40,18 @@ for($a=0; $a<$result->num_rows; $a++){
     }
 
 
-    if(in_array($row["apm"],$newArray)){
-        echo"<input style='margin:20px 0 0 20px' checked type='checkbox' name='apm' value='".$row['apm']."'><span style='margin-left: 20px'>".$row['apm']."</span>";
-        $i++;
-    }else{
-        echo"<input style='margin:20px 0 0 20px' type='checkbox' name='apm' value='".$row['apm']."'><span style='margin-left: 20px'>".$row['apm']."</span>";
-    }
+
     if ($found) {
+        if(in_array($row["apm"],$newArray)){
+            echo"<input style='margin:20px 0 0 20px' checked type='checkbox' name='apm' value='".$row['apm']."'><span style='margin-left: 20px'>".$row['apm']."</span>";
+            $i++;
+        }else{
+            echo"<input style='margin:20px 0 0 20px' type='checkbox' name='apm' value='".$row['apm']."'><span style='margin-left: 20px'>".$row['apm']."</span>";
+        }
         echo " <img src='./check-mark.png' style='width: 25px'>";
+        echo "<br><br>";
     }
-    echo "<br><br>";
+
 }
 
 echo "<input style='margin:10px 0 10px 20px' name='submit' type='submit' value='SUBMIT'>";

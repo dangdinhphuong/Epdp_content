@@ -10,7 +10,6 @@ for($a=0;$a<$result->num_rows;$a++){
     $row = $result->fetch_assoc();
     $html = "<input style='margin:20px 0 0 20px' type='radio' name='tema' value='".$row['tema']."'>
 <span style='margin-left: 20px'>".$row['tema']."</span>";
-    $html .= "<img src='./check-mark.png' style='width: 25px'>";
     $html .= "<br><br>";
     echo $html;
 }
