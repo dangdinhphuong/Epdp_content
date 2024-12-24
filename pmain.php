@@ -525,6 +525,30 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 ?>
 </body>
 <script>
+    // Hàm để xóa cookie
+    function deleteCookie(name) {
+        document.cookie = name + '=; Max-Age=0; path=/'; // Thiết lập thời gian sống của cookie bằng 0
+    }
+
+    // Hàm để kiểm tra cookie
+    function checkAndDeleteCookie(name) {
+        const cookieValue = document.cookie.split('; ').find(row => row.startsWith(name + '='));
+        if (cookieValue) {
+            const value = cookieValue.split('=')[1]; // Lấy giá trị cookie
+            if (value && value !== 'null') { // Kiểm tra xem giá trị không rỗng và khác 'null'
+                deleteCookie(name); // Gọi hàm xóa cookie
+            }
+        }
+    }
+
+    // Đặt sự kiện DOMContentLoaded để chạy trước khi tải trang
+    document.addEventListener('DOMContentLoaded', function () {
+        // Kiểm tra và xóa cookie 'selectField'
+        checkAndDeleteCookie('selectField');
+    });
+</script>
+<script>
+    let selectField = {};
     let tokenUser = <?php echo $tokenUser['token'] ?? 0; ?>;
     let t = document.getElementsByClassName('tema');
     let tajuk = document.getElementsByClassName('tajuk');
@@ -540,6 +564,24 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         return i;
     }
 
+    function checkChangeInput(input, content, join = false) {
+        // Lấy giá trị của input.text()
+        const text = input.textContent || input.innerText || ""; // Xử lý đa nền tảng
+
+        // Kiểm tra điều kiện: không null, không undefined, tồn tại và bằng content
+        if (text.trim() !== "" && text === content) {
+            return false;
+        } else if(join == false) {
+            input.textContent = content; // Cập nhật nội dung nếu khác
+            return true;
+        }else{
+            let separator = "<br>";
+            let mula = content.join(separator);
+            input.innerHTML = mula ;
+            return true;
+        }
+    }
+
     for (let i = 0; i < t.length; i++) {
 
         t[i].onclick = function () {
@@ -548,7 +590,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             // alert(t[i].id)
 
             let sub = document.getElementById(t[i].id);
-            let tema = window.open('tema.php?sub=' + sub.innerHTML, '', ' width=400,height=500')
+            let url = `tema.php?sub=${sub.innerHTML}&result=${result}`;
+            let tema = window.open(url, '', ' width=400,height=500')
 
             // Wait for the popup to finish loading
             tema.onload = function () {
@@ -576,9 +619,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let a = (formData.get("tema"));
 
         let tema = document.querySelector('#tema.input' + result);
-        tema.innerHTML = a;
+
         setTimeout(() => {
-            suggest(formData, false);
+            suggest(formData, false, checkChangeInput(tema, a));
         }, 0); // Chạy sau vòng lặp hiện tại;
     }
 
@@ -592,7 +635,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             if (tema.innerText.trim() == "" || tema.innerText == null) {
                 alert("Please select the 'tema' ")
             } else {
-                let tjk = window.open('tajuk.php?tema=' + tema.innerText, '', ' width=400,height=500')
+                let url = `tajuk.php?tema=${tema.innerText}&result=${result}`;
+                let tjk = window.open(url, '', ' width=400,height=500')
 
                 tjk.onload = function () {
 
@@ -608,48 +652,56 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         }
     }
 
+    function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "") + expires + "; path=/";
+    }
+
     function tjk(formData) {
         // Do something with the form data
         let a = (formData.get("tajuk"));
         let taj = document.querySelector('#tajuk.input' + result);
-
-        taj.innerHTML = a;
         setTimeout(() => {
-            suggest(formData, false);
+            suggest(formData, false, checkChangeInput(taj, a));
         }, 0); // Chạy sau vòng lặp hiện tại;
     }
 
-    function suggest(formData, show = true) {
-        let fields = ['tajuk', 'tema', 'kdg', 'cstd', 'op', 'kk', 'apm', 'au', 'apn'];
+    function suggest(formData, show = true, inputChange) {
+        let fields = ['tema', 'tajuk', 'kdg', 'cstd', 'op', 'kk', 'apm', 'au', 'apn'];
         let data = {};
+        let startIndex = 0;
+
 
         // Lấy dữ liệu từ các phần tử DOM
         fields.forEach(field => {
-
+            if (formData.get(field) != null && inputChange == true) {
+                startIndex = fields.indexOf(field)
+            }
             let content = $(`#${field}.input${result}`).html(); // Sử dụng let thay cho const
-
-            // if (content === null || content === undefined || content =='') {
-            //     content = $(`#${field}-sp${result}`).html();
-            // }
             data[field] = content ? content.replace(/<br\s*\/?>/gi, '/n') : ''; // Đảm bảo content không null trước khi replace
         });
-
-
+        selectField[result] = data
+        setCookie('selectField', JSON.stringify(selectField), 7);
         $.ajax({
             type: "POST",
             url: 'getPresetData.php',
             data: data,
             success: function (response) {
                 response = JSON.parse(response);
-
+                // Xóa các thẻ <span> đã tạo trước đó
+                fields.forEach((field, index) => {
+                    $(`#${field}-sp${result}`).remove();
+                    // Chỉ xóa textContent từ 'op' trở đi
+                    if (index > startIndex) {
+                        $(`#${field}.input${result}`).text('');
+                    }
+                });
                 if (show) {
-                    // Xóa các thẻ <span> đã tạo trước đó
-                    fields.forEach(field => {
-                        let element = document.querySelector(`#${field}.input${result}`);
-                        if (element) {
-                            element.querySelectorAll(`span[id^="${field}-sp"]`).forEach(span => span.remove());
-                        }
-                    });
                     if (response.length >= 1) {
                         // Nếu có dữ liệu trả về, hiển thị nội dung mới vào <span> nếu chưa có dữ liệu
                         response.forEach(record => {
@@ -672,15 +724,14 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                                             let span = document.createElement('span');
                                             span.id = `${field}-sp${result}`;
                                             formattedText = formattedText.replace(/\/n/g, '<br>'); // Thay thế tất cả "/n" bằng "\n"
-                                            console.log('field',`${field}-sp${result}`, formattedText)
+
                                             span.innerHTML = formattedText;
 
                                             // Gắn <span> cùng cấp với element
                                             element.parentNode.insertBefore(span, element.nextSibling);
                                         }
-                                    }
-                                    else if (data[field] != '') {
-                                        console.log('field2',`${field}-sp${result}`)
+                                    } else if (data[field] != '') {
+
                                         let existingSpans = Array.from(element.parentNode.querySelectorAll(`span[id^="${field}-sp${result}"]`));
                                         existingSpans.forEach(span => span.remove());
                                     }
@@ -724,7 +775,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'tema' ")
             } else {
                 let kdg = document.querySelector('#kdg.input' + result);
-                let kdgpage = window.open('kdg.php?kdg=' + kdg.innerHTML + '&sub=' + sub.innerHTML, '', ' width=400,height=500')
+                let url = `kdg.php?kdg=${encodeURIComponent(kdg.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}&result=${result}`;
+                let kdgpage = window.open(url, '', ' width=400,height=500')
 
                 kdgpage.onload = function () {
                     kdgpage.document.getElementById("kdg").addEventListener("submit", function (event) {
@@ -743,12 +795,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let a = (formData.getAll("kdg"));
 
         let kdg = document.querySelector('#kdg.input' + result);
-        let separator = "<br>";
-        let kandungan = a.join(separator);
 
-        kdg.innerHTML = kandungan;
         setTimeout(() => {
-            suggest(formData, false);
+            suggest(formData, false, checkChangeInput(kdg, a, true));
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -772,7 +821,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'kdg' ")
             } else {
                 let cstd = document.querySelector('#cstd.input' + result);
-                let url = `cstd.php?cstd=${encodeURIComponent(cstd.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let url = `cstd.php?cstd=${encodeURIComponent(cstd.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}&result=${result}`;
                 let cstdpage = window.open(url, '', 'width=400,height=500');
 
                 cstdpage.onload = function () {
@@ -792,12 +841,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let a = (formData.getAll("cstd"));
 
         let cstd = document.querySelector('#cstd.input' + result);
-        let separator = "<br>";
-        let standard = a.join(separator);
 
-        cstd.innerHTML = standard;
         setTimeout(() => {
-            suggest(formData);
+            suggest(formData,true, checkChangeInput(cstd, a, true) );
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -825,7 +871,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             } else {
                 let op = document.querySelector('#op.input' + result);
 
-                let url = `op.php?op=${encodeURIComponent(op.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let url = `op.php?op=${encodeURIComponent(op.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}&result=${result}`;
                 let oppage = window.open(url, '', ' width=400,height=500')
 
                 oppage.onload = function () {
@@ -846,14 +892,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
         let op = document.querySelector('#op.input' + result);
 
-        let separator = "<br>";
-        let obj = a.join(separator);
-
-        op.innerHTML = obj;
-        $('#op-sp' + result).text('');
         setTimeout(() => {
             $('#op-sp' + result).text('');
-            suggest(formData);
+            suggest(formData,true, checkChangeInput(op, a, true) );
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -880,7 +921,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'cstd' ")
             } else {
                 let kk = document.querySelector('#kk.input' + result);
-                let url = `kk.php?kk=${encodeURIComponent(kk.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let url = `kk.php?kk=${encodeURIComponent(kk.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}&result=${result}`;
                 let kkpage = window.open(url, '', ' width=400,height=500')
 
                 kkpage.onload = function () {
@@ -899,12 +940,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         // Do something with the form data
         let a = (formData.getAll("kk"));
         let kk = document.querySelector('#kk.input' + result);
-        let separator = "<br>";
-        let kriteria = a.join(separator);
-;
-        kk.innerHTML = kriteria;
+
         setTimeout(() => {
-            suggest(formData);
+            suggest(formData,true, checkChangeInput(kdg, a, true) );
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -938,7 +976,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'kk' ")
             } else {
                 let apm = document.querySelector('#apm.input' + result);
-                let url = `apm.php?apm=${encodeURIComponent(apm.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let url = `apm.php?apm=${encodeURIComponent(apm.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}&result=${result}`;
                 let apmpage = window.open(url, '', ' width=400,height=500')
 
                 apmpage.onload = function () {
@@ -957,11 +995,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         // Do something with the form data
         let a = (formData.getAll("apm"));
         let apm = document.querySelector('#apm.input' + result);
-        let separator = "<br>";
-        let mula = a.join(separator);
-        apm.innerHTML = mula;
         setTimeout(() => {
-            suggest(formData);
+            suggest(formData,true, checkChangeInput(apm, a, true) );
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -996,7 +1031,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'apm' ")
             } else {
                 let au = document.querySelector('#au.input' + result);
-                let url = `au.php?au=${encodeURIComponent(au.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let url = `au.php?au=${encodeURIComponent(au.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}&result=${result}`;
                 let aupage = window.open(url, '', ' width=400,height=500')
 
                 aupage.onload = function () {
@@ -1015,12 +1050,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         // Do something with the form data
         let a = (formData.getAll("au"));
         let au = document.querySelector('#au.input' + result);
-        let separator = "<br>";
-        let utama = a.join(separator);
-
-        au.innerHTML = utama;
         setTimeout(() => {
-            suggest(formData);
+            suggest(formData,true, checkChangeInput(kdg, a, true) );
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -1056,7 +1087,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'au' ")
             } else {
                 let apn = document.querySelector('#apn.input' + result);
-                let url = `apn.php?apn=${encodeURIComponent(apn.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let url = `apn.php?apn=${encodeURIComponent(apn.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}&result=${result}`;
                 let apnpage = window.open(url, '', ' width=400,height=500')
 
                 apnpage.onload = function () {
@@ -1075,12 +1106,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         // Do something with the form data
         let a = (formData.getAll("apn"));
         let apn = document.querySelector('#apn.input' + result);
-        let separator = "<br>";
-        let tutup = a.join(separator);
-
-        apn.innerHTML = tutup;
         setTimeout(() => {
-            suggest(formData);
+            suggest(formData,true, checkChangeInput(apn, a, true) );
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -1125,7 +1152,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             //     alert("Please select the 'tajuk' ")
             // }else{
             let refleksi = document.querySelector('#refleksi.input' + result);
-            let url = `refleksi.php?refleksi=${encodeURIComponent(refleksi.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+            let url = `refleksi.php?refleksi=${encodeURIComponent(refleksi.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}&result=${result}`;
             let refleksipage = window.open(url, '', ' width=400,height=500')
 
             refleksipage.onload = function () {

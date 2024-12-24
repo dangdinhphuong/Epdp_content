@@ -4,15 +4,24 @@ include("db.php");
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+$selectFields = [];
+if (isset($_COOKIE['selectField'])) {
+    $selectFields = json_decode($_COOKIE['selectField'], true); // Giải mã JSON
+    // Sử dụng $selectField ở đây
+}
 
 // Biến toàn cục
 global $conn;
 $presetData = $_SESSION['preset_data'] ?? [];
 $selected = '';
+$result = $_GET["result"] ?? 0;
+$fields = ['tema', 'tajuk', 'kdg', 'cstd', 'op', 'kk', 'apm', 'au', 'apn'];
+
+
 function getSelectedValue()
 {
-    $fields = ['tajuk', 'tema', 'kdg', 'cstd', 'op', 'kk', 'apm', 'au', 'apn'];
-    global $selected;
+
+    global $selected, $fields;
     foreach ($fields as $field) {
         if (!empty($_GET[$field])) {
             $selected = $_GET[$field] ?? '';
@@ -23,12 +32,50 @@ function getSelectedValue()
     return $selected; // Trả về giá trị $selected
 }
 
+function getData($field)
+{
+    global $result, $selectFields, $fields, $conn;
+    $conditions = [];
+    $parameters = [];
+    $fieldNew = array_slice($fields, 0, array_search($field, $fields));
+    $filteredSelectFields = array_intersect_key($selectFields[$result], array_flip($fieldNew));
+
+    foreach ($filteredSelectFields as $key => $filteredSelectField) {
+
+        $conditions[] = "$key = ?";
+        $cleaned_string = str_replace("/n", "", $filteredSelectField);
+        $value = preg_replace(['/\\n/', '/\\r/'], ['/n', '/r'], $cleaned_string);
+        $parameters[] = $value;
+    }
+
+    // Tạo câu SQL
+    $sql = "SELECT * FROM preset";
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(" AND ", $conditions);
+    }
+
+    $stmt = $conn->prepare($sql);
+
+
+    if (!empty($parameters)) {
+        $stmt->bind_param(str_repeat('s', count($parameters)), ...$parameters); // "s" cho kiểu string
+    }
+
+
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $rows = $result->fetch_all(MYSQLI_ASSOC);
+    return $rows ?? [];
+}
+
+
 function renderInputForm($field, $type = 'radio')
 {
+
     global $conn, $presetData, $selected; // Sử dụng biến toàn cục
     getSelectedValue();
-    echo "<form id='" . htmlspecialchars($field) . "' method='POST'>";
 
+    echo "<form id='" . htmlspecialchars($field) . "' method='POST'>";
     // Truy vấn dữ liệu nếu trường là 'tema'
     $data = [];
     if ($field === 'tema') {
@@ -44,8 +91,10 @@ function renderInputForm($field, $type = 'radio')
             return;
         }
     } else {
+
+        $dataAll = getData($field) ?? $presetData;
         // Dữ liệu từ biến toàn cục nếu không phải 'tema'
-        foreach ($presetData as $preset) {
+        foreach ($dataAll as $preset) {
             $data[] = $preset[$field] ?? '';
         }
     }
@@ -67,8 +116,6 @@ function renderInputForm($field, $type = 'radio')
             echo $html;
         }
     }
-
-
     echo "<input style='margin:10px 0 10px 20px' name='submit' type='submit' value='SUBMIT'>";
     echo "</form>";
 }
