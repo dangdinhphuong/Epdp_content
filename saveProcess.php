@@ -25,11 +25,11 @@ if (!$data) {
 $sql = "INSERT INTO process (
             period_id, sub, tema, tajuk, kdg, cstd, op, kk, apm, au, apn, refleksi, 
             emk, nilai, abm, kb, peta, pbd, tahap, akt21, p21, praujian, pascaujian, 
-            6k, aspirasi, inputRefleksi,tsm
+            6k, aspirasi, inputRefleksi, tsm
         ) VALUES (
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
             ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
-            ?, ?, ?,?
+            ?, ?, ?, ?
         )";
 
 $stmt = $conn->prepare($sql);
@@ -37,10 +37,12 @@ $stmt = $conn->prepare($sql);
 // Duyệt qua từng phần tử dữ liệu
 try {
     foreach ($data as $period_id => $period) {
-        foreach ($period as $period_id => $records) {
+        foreach ($period as $key => $records) {
 
             $flattenedArray = flattenArray($records);
-            array_unshift($flattenedArray, $period_id);
+            array_unshift($flattenedArray, $key); // Insert period_id at the beginning of the array
+
+            // Thực thi từng câu lệnh INSERT
             $stmt->execute($flattenedArray);
         }
     }
@@ -52,20 +54,16 @@ try {
 
 function flattenArray($array)
 {
-
     // Duyệt qua mảng và thay thế các phần tử mảng bằng giá trị của chúng
     foreach ($array as $key => $value) {
         if (is_array($value)) {
-
             // Nếu phần tử là mảng, lấy giá trị đầu tiên (chỉ có một phần tử trong mảng)
             $array[$key] = reset($value);
             if (is_array($array[$key])) {
-                $array[$key] = json_encode($array[$key]);;
+                $array[$key] = json_encode($array[$key]); // Encode nested arrays into JSON strings
             }
-
         }
     }
     return $array;
 }
-
 ?>

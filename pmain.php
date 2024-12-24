@@ -942,7 +942,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let kk = document.querySelector('#kk.input' + result);
 
         setTimeout(() => {
-            suggest(formData,true, checkChangeInput(kdg, a, true) );
+            suggest(formData,true, checkChangeInput(kk, a, true) );
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -1051,7 +1051,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let a = (formData.getAll("au"));
         let au = document.querySelector('#au.input' + result);
         setTimeout(() => {
-            suggest(formData,true, checkChangeInput(kdg, a, true) );
+            suggest(formData,true, checkChangeInput(au, a, true) );
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -1184,7 +1184,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
 
         let refleksi = document.querySelector('#refleksi.input' + result);
-
+        let inputRef = document.querySelector('#inputRefleksi.input' + result);
         let separator = "<br>";
         let impak = a.join(separator);
         input = impak.slice(0, 1);
