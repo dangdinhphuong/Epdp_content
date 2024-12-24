@@ -18,7 +18,13 @@ $fields = ['tajuk', 'tema', 'kdg', 'cstd', 'op', 'kk', 'apm', 'au', 'apn'];
 foreach ($fields as $field) {
     if (!empty($_POST[$field])) {
         $conditions[] = "$field = ?";
-        $parameters[] = str_replace('/n', "\r\n", $_POST[$field]);
+        $cleaned_string = str_replace("/n", "", $_POST[$field]);
+        $value = preg_replace(['/\\n/', '/\\r/'], ['/n', '/r'], $cleaned_string);
+        $parameters[] = $value;
+//        if($field =='au'){
+//
+//            var_dump($value,$cleaned_string);die;
+//        }
     }
 }
 

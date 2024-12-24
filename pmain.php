@@ -533,7 +533,6 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     var result;
 
     function get(num) {
-        console.log(num);
         return num;
     }
 
@@ -575,7 +574,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function tema(formData) {
         // Do something with the form data
         let a = (formData.get("tema"));
-        // console.log("tema" + result);
+
         let tema = document.querySelector('#tema.input' + result);
         tema.innerHTML = a;
         setTimeout(() => {
@@ -611,9 +610,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
     function tjk(formData) {
         // Do something with the form data
-        // console.log(formData.get("tajuk"));
         let a = (formData.get("tajuk"));
-        // console.log("tjk" + result);
         let taj = document.querySelector('#tajuk.input' + result);
 
         taj.innerHTML = a;
@@ -628,7 +625,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
         // Lấy dữ liệu từ các phần tử DOM
         fields.forEach(field => {
-            console.log(data);
+
             let content = $(`#${field}.input${result}`).html(); // Sử dụng let thay cho const
 
             // if (content === null || content === undefined || content =='') {
@@ -644,7 +641,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             data: data,
             success: function (response) {
                 response = JSON.parse(response);
-                console.log('show', show)
+
                 if (show) {
                     // Xóa các thẻ <span> đã tạo trước đó
                     fields.forEach(field => {
@@ -660,6 +657,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                                 if (record[field]) {
                                     $(`#${field}-sp${result}`).remove();
                                     let element = document.querySelector(`#${field}.input${result}`);
+
                                     if (element && data[field] == '') {
 
                                         // Format nội dung
@@ -673,12 +671,16 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                                             // Tạo một thẻ <span> mới nếu nội dung chưa tồn tại
                                             let span = document.createElement('span');
                                             span.id = `${field}-sp${result}`;
+                                            formattedText = formattedText.replace(/\/n/g, '<br>'); // Thay thế tất cả "/n" bằng "\n"
+                                            console.log('field',`${field}-sp${result}`, formattedText)
                                             span.innerHTML = formattedText;
 
                                             // Gắn <span> cùng cấp với element
                                             element.parentNode.insertBefore(span, element.nextSibling);
                                         }
-                                    } else if (data[field] != '') {
+                                    }
+                                    else if (data[field] != '') {
+                                        console.log('field2',`${field}-sp${result}`)
                                         let existingSpans = Array.from(element.parentNode.querySelectorAll(`span[id^="${field}-sp${result}"]`));
                                         existingSpans.forEach(span => span.remove());
                                     }
@@ -739,12 +741,11 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function kdgpage(formData) {
         // Do something with the form data
         let a = (formData.getAll("kdg"));
-        // console.log(a.length);
-        // console.log("kdg" + result);
+
         let kdg = document.querySelector('#kdg.input' + result);
         let separator = "<br>";
         let kandungan = a.join(separator);
-        // console.log(kandungan);
+
         kdg.innerHTML = kandungan;
         setTimeout(() => {
             suggest(formData, false);
@@ -771,7 +772,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'kdg' ")
             } else {
                 let cstd = document.querySelector('#cstd.input' + result);
-                let cstdpage = window.open('cstd.php?cstd=' + cstd.innerHTML + '&sub=' + sub.innerHTML, '', ' width=400,height=500')
+                let url = `cstd.php?cstd=${encodeURIComponent(cstd.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let cstdpage = window.open(url, '', 'width=400,height=500');
 
                 cstdpage.onload = function () {
                     cstdpage.document.getElementById("cstd").addEventListener("submit", function (event) {
@@ -788,12 +790,11 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function cstdpage(formData) {
         // Do something with the form data
         let a = (formData.getAll("cstd"));
-        // console.log(a);
-        // console.log("cstd" + result);
+
         let cstd = document.querySelector('#cstd.input' + result);
         let separator = "<br>";
         let standard = a.join(separator);
-        // console.log(standard);
+
         cstd.innerHTML = standard;
         setTimeout(() => {
             suggest(formData);
@@ -823,7 +824,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'cstd' ")
             } else {
                 let op = document.querySelector('#op.input' + result);
-                let oppage = window.open('op.php?op=' + op.innerHTML + '&sub=' + sub.innerHTML, '', ' width=400,height=500')
+
+                let url = `op.php?op=${encodeURIComponent(op.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let oppage = window.open(url, '', ' width=400,height=500')
 
                 oppage.onload = function () {
                     oppage.document.getElementById("op").addEventListener("submit", function (event) {
@@ -840,13 +843,12 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function oppage(formData) {
         // Do something with the form data
         let a = (formData.getAll("op"));
-        // console.log(a);
-        // console.log("op" + result);
+
         let op = document.querySelector('#op.input' + result);
 
         let separator = "<br>";
         let obj = a.join(separator);
-        // console.log(obj);
+
         op.innerHTML = obj;
         $('#op-sp' + result).text('');
         setTimeout(() => {
@@ -878,7 +880,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'cstd' ")
             } else {
                 let kk = document.querySelector('#kk.input' + result);
-                let kkpage = window.open('kk.php?kk=' + kk.innerHTML + '&sub=' + sub.innerHTML, '', ' width=400,height=500')
+                let url = `kk.php?kk=${encodeURIComponent(kk.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let kkpage = window.open(url, '', ' width=400,height=500')
 
                 kkpage.onload = function () {
                     kkpage.document.getElementById("kk").addEventListener("submit", function (event) {
@@ -895,12 +898,10 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function kkpage(formData) {
         // Do something with the form data
         let a = (formData.getAll("kk"));
-        // console.log(a);
-        // console.log("kk" + result);
         let kk = document.querySelector('#kk.input' + result);
         let separator = "<br>";
         let kriteria = a.join(separator);
-        // console.log(kriteria);
+;
         kk.innerHTML = kriteria;
         setTimeout(() => {
             suggest(formData);
@@ -937,7 +938,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'kk' ")
             } else {
                 let apm = document.querySelector('#apm.input' + result);
-                let apmpage = window.open('apm.php?apm=' + apm.innerHTML + '&sub=' + sub.innerHTML, '', ' width=400,height=500')
+                let url = `apm.php?apm=${encodeURIComponent(apm.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let apmpage = window.open(url, '', ' width=400,height=500')
 
                 apmpage.onload = function () {
                     apmpage.document.getElementById("apm").addEventListener("submit", function (event) {
@@ -954,12 +956,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function apmpage(formData) {
         // Do something with the form data
         let a = (formData.getAll("apm"));
-        // console.log(a);
-        // console.log("apm" + result);
         let apm = document.querySelector('#apm.input' + result);
         let separator = "<br>";
         let mula = a.join(separator);
-        // console.log(mula);
         apm.innerHTML = mula;
         setTimeout(() => {
             suggest(formData);
@@ -997,7 +996,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'apm' ")
             } else {
                 let au = document.querySelector('#au.input' + result);
-                let aupage = window.open('au.php?au=' + au.innerHTML + '&sub=' + sub.innerHTML, '', ' width=400,height=500')
+                let url = `au.php?au=${encodeURIComponent(au.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let aupage = window.open(url, '', ' width=400,height=500')
 
                 aupage.onload = function () {
                     aupage.document.getElementById("au").addEventListener("submit", function (event) {
@@ -1014,12 +1014,10 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function aupage(formData) {
         // Do something with the form data
         let a = (formData.getAll("au"));
-        // console.log(a);
-        // console.log("au" + result);
         let au = document.querySelector('#au.input' + result);
         let separator = "<br>";
         let utama = a.join(separator);
-        // console.log(utama);
+
         au.innerHTML = utama;
         setTimeout(() => {
             suggest(formData);
@@ -1058,7 +1056,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 alert("Please select the 'au' ")
             } else {
                 let apn = document.querySelector('#apn.input' + result);
-                let apnpage = window.open('apn.php?apn=' + apn.innerHTML + '&sub=' + sub.innerHTML, '', ' width=400,height=500')
+                let url = `apn.php?apn=${encodeURIComponent(apn.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+                let apnpage = window.open(url, '', ' width=400,height=500')
 
                 apnpage.onload = function () {
                     apnpage.document.getElementById("apn").addEventListener("submit", function (event) {
@@ -1075,12 +1074,10 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function apnpage(formData) {
         // Do something with the form data
         let a = (formData.getAll("apn"));
-        // console.log(a);
-        // console.log("apn" + result);
         let apn = document.querySelector('#apn.input' + result);
         let separator = "<br>";
         let tutup = a.join(separator);
-        // console.log(standard);
+
         apn.innerHTML = tutup;
         setTimeout(() => {
             suggest(formData);
@@ -1128,7 +1125,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             //     alert("Please select the 'tajuk' ")
             // }else{
             let refleksi = document.querySelector('#refleksi.input' + result);
-            let refleksipage = window.open('refleksi.php?refleksi=' + refleksi.innerHTML + '&sub=' + sub.innerHTML, '', ' width=400,height=500')
+            let url = `refleksi.php?refleksi=${encodeURIComponent(refleksi.innerHTML)}&sub=${encodeURIComponent(sub.innerHTML)}`;
+            let refleksipage = window.open(url, '', ' width=400,height=500')
 
             refleksipage.onload = function () {
                 refleksipage.document.getElementById("refleksi").addEventListener("submit", function (event) {
@@ -1156,16 +1154,15 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function refleksipage(formData) {
         // Do something with the form data
         let a = formData.getAll("refleksi");
-        console.log('a', a);
+
 
         let refleksi = document.querySelector('#refleksi.input' + result);
-        let inputRef = document.querySelector('#inputRefleksi.input' + result);
-        console.log('inputRef', inputRef, '#inputRefleksi.input' + result)
+
         let separator = "<br>";
         let impak = a.join(separator);
         input = impak.slice(0, 1);
         input = parseInt(input);
-        console.log('input', input, impak);
+
 
         refleksi.innerHTML = impak.slice(1);
 
@@ -1195,7 +1192,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 } else {
                     event.target.setCustomValidity(''); // Clear the validation message
                     array[i] = userInput;
-                    console.log("User input:", array, result);
+
                     inputArray = array.filter(Boolean); // Filter out empty or undefined values
                     userInputArray[result] = inputArray;
                 }
@@ -1248,7 +1245,6 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             let uniqueArray = [];
             uniqueArray.push(uniqueArrays);
             uniqueArray.push(array);
-            console.info(uniqueArray);
 
             if (penggal.value !== '' || minggu.value !== '') {
                 alert("Please fill in the penggal and minggu");
@@ -1286,11 +1282,6 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                     cntArray.push(cntInput);
 
                     ans.push({[pid]: sub});
-
-                    console.log('ans', ans)
-                    console.log('sub', sub)
-                    console.log('userInputArray', userInputArray)
-                    console.log('inputRefArray', inputRefArray)
                 }
                 save(JSON.stringify(ans))
             }
