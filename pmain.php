@@ -14,6 +14,41 @@ $id = (int)$_COOKIE["id"] ?? 1;
 
 $sql = "SELECT * FROM `period`
             WHERE userId = '$id' AND `day` = '$day' AND `status` = 0 ORDER BY std";
+function formatDate($date, $month, $year) {
+    // Tạo mảng ánh xạ tháng từ tên sang số
+    $months = [
+        "JANUARY" => 1,
+        "FEBRUARY" => 2,
+        "MARCH" => 3,
+        "APRIL" => 4,
+        "MAY" => 5,
+        "JUNE" => 6,
+        "JULY" => 7,
+        "AUGUST" => 8,
+        "SEPTEMBER" => 9,
+        "OCTOBER" => 10,
+        "NOVEMBER" => 11,
+        "DECEMBER" => 12
+    ];
+
+    // Kiểm tra và chuyển tháng thành số
+    $monthNumber = isset($months[strtoupper($month)]) ? $months[strtoupper($month)] : null;
+
+    if ($monthNumber === null) {
+        return "Invalid month name"; // Nếu tháng không hợp lệ
+    }
+
+    // Tạo đối tượng DateTime và tính toán ngày
+    try {
+        $formattedDate = new DateTime();
+        $formattedDate->setDate($year, $monthNumber, $date);
+
+        // Trả về ngày đã được format (ví dụ: Y-m-d)
+        return $formattedDate->format('Y-m-d'); // Kết quả: 2025-01-19
+    } catch (Exception $e) {
+        return "Error in date calculation: " . $e->getMessage();
+    }
+}
 
 $result = $conn->query($sql);
 $periodData = $result->fetch_all(MYSQLI_ASSOC);
@@ -505,9 +540,21 @@ if (count($periodData) <= 0) {
                         <td>
                             <label for="tsm"><b>后续作业/TUGASAN SUSULAN MURID:</b></label>
                         </td>
-                        <td>
-                            <input class="input<?php echo $i ?> txt input-txt-<?php echo $i ?>" type="text" name="tsm">
+                        <td class="d-flex justify-content-between textarea-table-<?php echo $i ?> input<?php echo $i ?>  input-txt-<?php echo $i ?>" id="tsm-<?php echo $i ?>">
+                            <div class="p-2">
+                                <input type="number" class=" w-100 m-1 tsm1"  >
+                                <input type="number" class=" w-100 m-1 totalTsm1" >
+                            </div>
+                            <div class="p-2">
+                                <input type="number" class=" w-100 m-1 tsm2"  >
+                                <input type="number" class=" w-100 m-1 totalTsm2"  >
+                            </div>
+                            <div class="p-2">
+                                <input type="number" class=" w-100 m-1 tsm3"  >
+                                <input type="number" class=" w-100 m-1 totalTsm3"  >
+                            </div>
                         </td>
+
                     </tr>
                 </table>
             </div>
@@ -1264,6 +1311,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
     $(document).ready(function () {
         $("#submit").click(function () {
+            updateStatus(<?=$day?>);
             if (tokenUser <= 0) {
                 alert("You have run out of tokens");
                 return false;
@@ -1273,9 +1321,9 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             uniqueArray.push(uniqueArrays);
             uniqueArray.push(array);
 
-            if (penggal.value !== '' || minggu.value !== '') {
+            if (penggal.value == '' || minggu.value == '') {
                 alert("Please fill in the penggal and minggu");
-                window.location.replace('#week');
+                return false;
             } else {
 
                 for (let i = 0; i < table.length; i++) {
@@ -1296,6 +1344,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                         sub.push(result);
                     }
 
+                    let tugasanSusulanMurid = [];
                     for (let j = 0; j < input.length; j++) {
                         var nameKey = input[j].name ?? input[j].id;
                         result = {[nameKey]: input[j].value};
@@ -1303,13 +1352,41 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                             result = {[nameKey]: userInputArray[i]};
                         }
 
+                        if (nameKey == "tsm-" + i) {
+
+                            result = {['tsm']: mergeTextWithInputs(i)};
+                        }
+
                         sub.push(result);
                     }
+
                     inputRefArray.push(inputArray.filter(Boolean));
                     cntArray.push(cntInput);
 
                     ans.push({[pid]: sub});
+
                 }
+
+                let count = 0;
+                ans.forEach(obj => {
+                    Object.values(obj).forEach(array => {
+                        // Thêm phần tử `nameRefleksi` vào mảng
+                        array.push({["nameRefleksi"]: $(".input-text-" + count + "#refleksi").text()});
+
+                        // Thêm phần tử `penggal` vào mảng
+                        array.push({["penggal"]: penggal.value});
+
+                        // Thêm phần tử `minggu` vào mảng
+                        array.push({["minggu"]: minggu.value});
+
+                        // Tăng biến count (nếu cần, tùy thuộc vào logic của bạn)
+                        count++;
+                    });
+                });
+
+
+                console.log("ans",ans)
+                console.log("nameRefleksi",{["nameRefleksi"]: $('#refleksi').text()})
                 save(JSON.stringify(ans))
             }
 
@@ -1317,6 +1394,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         });
 
         function save(data) {
+            console.log('pmain',data)
             $.ajax({
                 url: 'saveProcess.php',
                 type: 'POST',
@@ -1347,6 +1425,28 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             });
         }
 
+        function mergeTextWithInputs(i) {
+            let text = [
+                "_ / 位学生不能掌 握技能将额外辅导",
+                "_ / 位学能够掌握 技能将给予额外的巩固练习",
+                "_ / 位学能够掌 握技能将给予额外高思 维的练习"
+            ];
+            let result = [];
+            // Tìm các input trong td có class textarea-table-i
+            const container = $('.textarea-table-' + i);
+
+            // Lặp qua từng cặp input (tsmX và totalTsmX)
+            for (let j = 1; j <= text.length; j++) {
+                const tsmValue = container.find('.tsm' + j).val() || '0';
+                const totalTsmValue = container.find('.totalTsm' + j).val() || '0';
+
+                // Kết hợp dữ liệu input vào text
+                const mergedText = text[j - 1].replace("_ /", `_ ${tsmValue} _ / _ ${totalTsmValue} __`).replace("位学生", `位学生 ${totalTsmValue}`);
+                result.push(mergedText);
+            }
+
+            return result;
+        }
         function getUrlParameter(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
@@ -1358,8 +1458,13 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         const date = getUrlParameter('date');
 
         function updateStatus(responseData) {
-            // Dữ liệu để gửi cập nhật vào cơ sở dữ liệu (có thể bao gồm ID, userId, ngày, etc.)
-            const updateData = {day: responseData};
+            const updateData = {
+                day: responseData,
+                date: '<?= formatDate($date, $month, $year) ?>' // Đảm bảo formatDate trả về chuỗi đúng
+            };
+
+            // Kiểm tra dữ liệu trước khi gửi
+            console.log(updateData);
 
             // Thực hiện yêu cầu AJAX để cập nhật bản ghi
             $.ajax({
@@ -1367,12 +1472,15 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 type: 'POST',
                 data: updateData,
                 success: function (updateResponse) {
+                    // Xử lý kết quả trả về từ server nếu cần
+                    console.log(updateResponse); // Kiểm tra kết quả trả về
                 },
                 error: function (xhr, status, error) {
                     alert('Error updating status: ' + error);
                 }
             });
         }
+
 
         function updateToken() {
             $.ajax({
@@ -1393,8 +1501,6 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 }
             });
         }
-
-
     })
     ;
 </script>
