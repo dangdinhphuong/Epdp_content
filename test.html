@@ -1,96 +1,449 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hai input</title>
-    <script>
-        function getCombinedValue() {
-            const input1 = document.getElementById("part1").value;
-            const input2 = document.getElementById("part2").value;
-            const combinedValue = `${input1}/${input2}`;
-            alert(`Giá trị kết hợp: ${combinedValue}`); // Hiển thị giá trị
-            return combinedValue; // Trả về giá trị kết hợp
-        }
-    </script>
-</head>
-<body>
-<div style=" border: 1px solid; width: 110px; border-radius: 5px">
-<input id="int0" type="number" min="1" required="" style="width: 40px; height: 30px; border: none;  border-top-left-radius: 5px;  border-bottom-left-radius: 5px;">
-<span>/</span>
-<input id="total0" type="number" min="1" required="" style="width: 40px; height: 30px;  border: none">
-</div>
+<?php foreach ($periodDataOld as  $rowOld) { ?>
+    <div class="row mb-3">
+        <div class="col-md-3">
+            <div class="border p-3">
+                <p><strong>Subject:</strong> <?= $rowOld["sub"] ?></p>
+                <p><strong>Class:</strong> <?= $rowOld["class"] ?></p>
+                <p><strong>Time:</strong> <?= $rowOld["start"] ?> - <?= $rowOld["end"] ?></p>
+                <p><strong>Student No:</strong> <?= $rowOld["noStu"] ?></p>
+            </div>
+        </div>
+        <div class="col-md-9 mb-5">
+            <table class="table table-bordered" id="pmain-<?= $periodDataCount ?>">
+                <span id="pid<?php echo $periodDataCount ?>" style="display: none;"><?php echo $rowOld["no"] ?></span>
 
-border-left-radius
-<br><br>
-<button onclick="getCombinedValue()">Lấy giá trị</button>
-</body>
-</html>
-for (let i = 0; i < input; i++) {
-// Tạo thẻ span để bọc hai input
-let spanWrapper = document.createElement('span');
-spanWrapper.style.display = 'inline-block'; // Giữ các input trong cùng một dòng
-spanWrapper.style.margin = '8px'; // Khoảng cách giữa các nhóm input
-spanWrapper.style.border = '1px solid'; // Thêm viền
-spanWrapper.style.borderRadius = '5px'; // Bo tròn viền
 
-// Tạo input đầu tiên
-let newInput1 = document.createElement('input');
-newInput1.id = `int${i}`;
-newInput1.type = 'number';
-newInput1.min = '1';
-newInput1.required = true;
-newInput1.style.width = '50px';
-newInput1.style.height = '30px';
-newInput1.style.border = 'none'; // Xóa viền input
-newInput1.style.borderRadius = '5px'; // Xóa bo tròn của input
+                <tr>
+                    <td class="col-4">
+                        <label for="sub"><b>科目/MATA PELAJARAN:</b></label>
+                    </td>
+                    <td>
+                        <b id="<?php echo $rowOld["sub"] ?>"><?php echo $rowOld["sub"] ?></b>
+                        <span class="input-text-<?php echo $periodDataCount ?> " style="display: none"
+                              id="sub"><?php echo $rowOld["sub"] ?></span>
+                    </td>
+                </tr>
 
-// Tạo label "/"
-let label = document.createElement('span');
-label.textContent = '/';
-label.style.margin = '0 8px'; // Khoảng cách giữa hai input
+                <tr>
+                    <td>
+                        <label for="tema"><b>主题/TEMA:</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px"
+                                id="<?php echo $rowOld["sub"] ?>" class="tema">
+                            <i class="fas fa-angle-right fa-lg"></i>
+                        </button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>" id="tema"></span>
+                    </td>
+                </tr>
 
-// Tạo input thứ hai
-let newInput2 = document.createElement('input');
-newInput2.id = `total${i}`;
-newInput2.type = 'number';
-newInput2.min = '1';
-newInput2.required = true;
-newInput2.style.width = '50px';
-newInput2.style.height = '30px';
-newInput2.style.border = 'none'; // Xóa viền input
-newInput2.style.borderRadius = '5px'; // Xóa bo tròn của input
+                <tr>
+                    <td>
+                        <label for="tajuk"><b>单元/TAJUK:</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px" class="tajuk"><i
+                                    class="fas fa-angle-right fa-lg"></i></button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>" id="tajuk"></span>
+                    </td>
+                </tr>
 
-// Append các phần tử vào thẻ span
-spanWrapper.appendChild(newInput1);
-spanWrapper.appendChild(label);
-spanWrapper.appendChild(newInput2);
+                <tr>
+                    <td>
+                        <label for="kdg"><b>内容标准/STANDARD KANDUNGAN:</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px" class="kdg"><i
+                                    class="fas fa-angle-right fa-lg"></i></button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>" id="kdg"></span>
+                    </td>
+                </tr>
 
-// Append thẻ span vào container (inputRef)
-inputRef.appendChild(spanWrapper);
+                <tr>
+                    <td>
+                        <label for="cstd"><b>学习标准/STANDARD PEMBELAJARAN:</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px" class="cstd"><i
+                                    class="fas fa-angle-right fa-lg"></i></button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>" id="cstd"></span>
+                    </td>
+                </tr>
 
-// Xử lý sự kiện cho từng input
-newInput1.addEventListener('input', function (event) {
-let userInput = event.target.value;
-if (userInput < 1) {
-event.target.setCustomValidity('Please enter a positive number.'); // Hiển thị thông báo lỗi
-} else {
-event.target.setCustomValidity(''); // Xóa thông báo lỗi
-array[i] = userInput; // Lưu giá trị vào mảng
-inputArray = array.filter(Boolean); // Lọc các giá trị hợp lệ
-userInputArray[result] = inputArray;
-}
-});
+                <tr>
+                    <td>
+                        <label for="op"><b>学习目标/OBJEKTIF PEMBELAJARAN (OP):</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px" class="op"><i
+                                    class="fas fa-angle-right fa-lg"></i></button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>" id="op"></span>
+                    </td>
+                </tr>
 
-newInput2.addEventListener('input', function (event) {
-let userInput = event.target.value;
-if (userInput < 1) {
-event.target.setCustomValidity('Please enter a positive number.'); // Hiển thị thông báo lỗi
-} else {
-event.target.setCustomValidity(''); // Xóa thông báo lỗi
-array[i] = userInput; // Lưu giá trị vào mảng
-inputArray = array.filter(Boolean); // Lọc các giá trị hợp lệ
-userInputArray[result] = inputArray;
-}
-});
-}
+                <tr>
+                    <td>
+                        <label for="kk"><b>达标准则/KRITERIA KEJAYAAN (KK):</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px" class="kk"><i
+                                    class="fas fa-angle-right fa-lg"></i></button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>" id="kk"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="apm"><b>导入(引起动机)/AKTIVITI PERMULAAN:</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px" class="apm"><i
+                                    class="fas fa-angle-right fa-lg"></i></button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>" id="apm"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="au"><b>教学活动/AKTIVITI UTAMA:</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px" class="au"><i
+                                    class="fas fa-angle-right fa-lg"></i></button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>" id="au"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="apn"><b>结束/AKTIVITI PENUTUP:</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px" class="apn"><i
+                                    class="fas fa-angle-right fa-lg"></i></button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>" id="apn"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="emk"><b>跨课程元素/EMK:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>" name="emk"
+                                id="emk">
+                            <option value=""></option>
+                            <?php
+                            $sql3 = "SELECT * FROM emk";
+                            $result3 = $conn->query($sql3);
+                            for ($a = 0; $a < $result3->num_rows; $a++) {
+                                $row3 = $result3->fetch_assoc();
+                                echo "<option value='" . $row3['emk'] . "'>" . $row3['emk'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="nilai"><b>道德价值/NILAI:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>" name="nilai"
+                                id="nilai">
+                            <option value=""></option>
+                            <?php
+                            $sql4 = "SELECT * FROM nilai";
+                            $result4 = $conn->query($sql4);
+                            for ($a = 0; $a < $result4->num_rows; $a++) {
+                                $row4 = $result4->fetch_assoc();
+                                echo "<option value='" . $row4['nilai'] . "'>" . $row4['nilai'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="abm"><b>教具/ABM/BBM:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>" name="abm"
+                                id="abm">
+                            <option value=""></option>
+                            <?php
+                            $sql5 = "SELECT * FROM bbm";
+                            $result5 = $conn->query($sql5);
+                            for ($a = 0; $a < $result5->num_rows; $a++) {
+                                $row5 = $result5->fetch_assoc();
+                                echo "<option value='" . $row5['bbm'] . "'>" . $row5['bbm'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="kb"><b>思维技能/KEMAHIRAN BERFIKIR:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>" name="kb"
+                                id="kb">
+                            <option value=""></option>
+                            <?php
+                            $sql6 = "SELECT * FROM `pemikiran`";
+                            $result6 = $conn->query($sql6);
+                            for ($a = 0; $a < $result6->num_rows; $a++) {
+                                $row6 = $result6->fetch_assoc();
+                                echo "<option value='" . $row6['pemikiran'] . "'>" . $row6['pemikiran'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="peta"><b>思路图/PETA i-THINK:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>" name="peta"
+                                id="peta">
+                            <option value=""></option>
+                            <?php
+                            $sql8 = "SELECT * FROM `peta`";
+                            $result8 = $conn->query($sql8);
+                            for ($a = 0; $a < $result8->num_rows; $a++) {
+                                $row8 = $result8->fetch_assoc();
+                                echo "<option value='" . $row8['peta'] . "'>" . $row8['peta'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="tahap"><b>课堂评估/PBD:</b></label>
+                    </td>
+                    <td>
+                        <input class="input<?php echo $periodDataCount ?> txt input-txt-<?php echo $periodDataCount ?>" type="text" name="pbd">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="tahap"><b>表现标准/Tahap PBS:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>" name="tahap"
+                                id="tahap">
+                            <option value=""></option>
+                            <?php
+                            $sql9 = "SELECT * FROM `tahap`";
+                            $result9 = $conn->query($sql9);
+                            for ($a = 0; $a < $result9->num_rows; $a++) {
+                                $row9 = $result9->fetch_assoc();
+                                echo "<option value='" . $row9['tahap'] . "'>" . $row9['tahap'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="akt21"><b>21世纪教学法/AKTIVITI PAK 21:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>" name="akt21"
+                                id="akt21">
+                            <option value=""></option>
+                            <?php
+                            $sql7 = "SELECT * FROM `akt21`";
+                            $result7 = $conn->query($sql7);
+                            for ($a = 0; $a < $result7->num_rows; $a++) {
+                                $row7 = $result7->fetch_assoc();
+                                echo "<option value='" . $row7['aktiviti'] . "'>" . $row7['aktiviti'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="p21"><b>21世纪学习法/PAK-21:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>" name="p21"
+                                id="p21">
+                            <option value=""></option>
+                            <?php
+                            $sql14 = "SELECT * FROM `p21`";
+                            $result14 = $conn->query($sql14);
+                            for ($a = 0; $a < $result14->num_rows; $a++) {
+                                $row14 = $result14->fetch_assoc();
+                                echo "<option value='" . $row14['p21'] . "'>" . $row14['p21'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="praujian"><b>前测/Praujian:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                name="praujian"
+                                id="praujian">
+                            <option value=""></option>
+                            <?php
+                            $sql15 = "SELECT * FROM `ujian`";
+                            $result15 = $conn->query($sql15);
+                            for ($a = 0; $a < $result15->num_rows; $a++) {
+                                $row15 = $result15->fetch_assoc();
+                                echo "<option value='" . $row15['type'] . "'>" . $row15['type'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="pascaujian"><b>后测/Pascaujian:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                name="pascaujian"
+                                id="pascaujian">
+                            <option value=""></option>
+                            <?php
+                            $sql16 = "SELECT * FROM `ujian`";
+                            $result16 = $conn->query($sql16);
+                            for ($a = 0; $a < $result16->num_rows; $a++) {
+                                $row16 = $result16->fetch_assoc();
+                                echo "<option value='" . $row16['type'] . "'>" . $row16['type'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="6k"><b>6 种'K'元素/Kemahiran 6K:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>" name="6k"
+                                id="6k">
+                            <option value=""></option>
+                            <?php
+                            $sql17 = "SELECT * FROM `kemahiran`";
+                            $result17 = $conn->query($sql17);
+                            for ($a = 0; $a < $result17->num_rows; $a++) {
+                                $row17 = $result17->fetch_assoc();
+                                echo "<option value='" . $row17['kemahiran'] . "'>" . $row17['kemahiran'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="aspirasi"><b>学生愿景/Aspirasi Murid:</b></label>
+                    </td>
+                    <td>
+                        <select style="width:600px; height:35px"
+                                class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                name="aspirasi"
+                                id="aspirasi">
+                            <option value=""></option>
+                            <?php
+                            $sql18 = "SELECT * FROM `aspirasi`";
+                            $result18 = $conn->query($sql18);
+                            for ($a = 0; $a < $result18->num_rows; $a++) {
+                                $row18 = $result18->fetch_assoc();
+                                echo "<option value='" . $row18['aspirasi'] . "'>" . $row18['aspirasi'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <!--Nút-->
+                <tr>
+                    <td>
+                        <label for="refleksi"><b>反思/REFLEKSI:</b></label>
+                    </td>
+                    <td>
+                        <button style="width:50px; height:25px; border-radius: 10px" class="refleksi"><i
+                                    class="fas fa-angle-right fa-lg"></i></button>
+                        <br>
+                        <span class="input<?php echo $periodDataCount ?> input-text-<?php echo $periodDataCount ?>" id="refleksi"
+                              name="refleksi"></span><br>
+                        <span class="input<?php echo $periodDataCount ?> input-txt-<?php echo $periodDataCount ?>" id="inputRefleksi"
+                              name="inputRefleksi"></span>
+                    </td>
+                </tr>
+
+                <tr style="display: none" id="moral" class="krmj<?php echo $periodDataCount ?>">
+                    <td class="col-4">
+                        <label for="krmj"><b>S3.3 Krmj (Johor sahaja):</b></label>
+                    </td>
+                    <td class="col-8">
+                        <span class="input<?php echo $periodDataCount ?> word" id="krmj">3.3.5.5-Mengamalkan Seni Budaya Johor (Gaya kepimpinan Johor ditampil dan ditonjolkan melalui aktiviti murid.)</span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label for="tsm"><b>后续作业/TUGASAN SUSULAN MURID:</b></label>
+                    </td>
+                    <td class="d-flex justify-content-between textarea-table-<?php echo $periodDataCount ?> input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>" id="tsm-<?php echo $periodDataCount ?>">
+                        <div class="p-2">
+                            <input type="number" class=" w-100 m-1 tsm1"  >
+                            <input type="number" class=" w-100 m-1 totalTsm1" >
+                        </div>
+                        <div class="p-2">
+                            <input type="number" class=" w-100 m-1 tsm2"  >
+                            <input type="number" class=" w-100 m-1 totalTsm2"  >
+                        </div>
+                        <div class="p-2">
+                            <input type="number" class=" w-100 m-1 tsm3"  >
+                            <input type="number" class=" w-100 m-1 totalTsm3"  >
+                        </div>
+                    </td>
+
+                </tr>
+            </table>
+        </div>
+    </div>
+<?php  $periodDataCount++  } ?>

@@ -14,7 +14,16 @@ $id = (int)$_COOKIE["id"] ?? 1;
 
 $sql = "SELECT * FROM `period`
             WHERE userId = '$id' AND `day` = '$day' AND `status` = 0 ORDER BY std";
-function formatDate($date, $month, $year) {
+
+$sqlProcess = "SELECT *
+        FROM `process`
+        LEFT JOIN `period` ON `process`.`period_id` = `period`.`no`
+        WHERE `period`.`userId` = '$id' 
+          AND `period`.`status` = 1 
+          AND `day` = '$day' ORDER BY std ";
+
+function formatDate($date, $month, $year)
+{
     // Tạo mảng ánh xạ tháng từ tên sang số
     $months = [
         "JANUARY" => 1,
@@ -51,9 +60,40 @@ function formatDate($date, $month, $year) {
 }
 
 $result = $conn->query($sql);
-$periodData = $result->fetch_all(MYSQLI_ASSOC);
+$resultOld = $conn->query($sqlProcess);
 
-if (count($periodData) <= 0) {
+$periodData = $result->fetch_all(MYSQLI_ASSOC);
+$periodDataCount2 = $periodDataCount = count($periodData);
+
+$periodDataOld = $resultOld->fetch_all(MYSQLI_ASSOC);
+
+$fields = ['tema', 'tajuk', 'kdg', 'cstd', 'op', 'kk', 'apm', 'au', 'apn'];
+$output  = [];
+
+foreach ($periodDataOld as $index => $item) {
+    $output[$periodDataCount2] = [];
+    foreach ($fields as $field) {
+        $output[$periodDataCount2][$field] = $item[$field] ?? ""; // Gán giá trị hoặc rỗng nếu không tồn tại
+    }
+    $periodDataCount2++;
+}
+
+// Chuyển $output thành JSON với định dạng đẹp
+$jsonOutput = json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+// Thiết lập cookie với thời gian sống là 7 ngày
+setcookie('selectField', $jsonOutput, time() + (7 * 24 * 60 * 60), '/');
+
+// Sau khi thiết lập cookie, bạn có thể lấy giá trị cookie và giải mã
+if (isset($_COOKIE['selectField'])) {
+    $selectFields = json_decode($_COOKIE['selectField'], true); // Giải mã JSON
+    var_dump($selectFields);
+} else {
+    echo "Cookie 'selectField' chưa được thiết lập.";
+}
+die;
+
+if ($periodDataCount <= 0) {
     echo '<script>alert("Please set the period for this day")</script>';
     echo '<script>window.location.href="process.php"</script>';
 }
@@ -109,10 +149,8 @@ if (count($periodData) <= 0) {
                                                  name="minggu" required>
 </section>
 <div class=" mt-4">
-
     <?php foreach ($periodData as $i => $row) { ?>
-
-        <div class="row mb-3">
+        <div class="row mb-3 new ">
             <div class="col-md-3">
                 <div class="border p-3">
                     <p><strong>Subject:</strong> <?= $row["sub"] ?></p>
@@ -540,18 +578,19 @@ if (count($periodData) <= 0) {
                         <td>
                             <label for="tsm"><b>后续作业/TUGASAN SUSULAN MURID:</b></label>
                         </td>
-                        <td class="d-flex justify-content-between textarea-table-<?php echo $i ?> input<?php echo $i ?>  input-txt-<?php echo $i ?>" id="tsm-<?php echo $i ?>">
+                        <td class="d-flex justify-content-between textarea-table-<?php echo $i ?> input<?php echo $i ?>  input-txt-<?php echo $i ?>"
+                            id="tsm-<?php echo $i ?>">
                             <div class="p-2">
-                                <input type="number" class=" w-100 m-1 tsm1"  >
-                                <input type="number" class=" w-100 m-1 totalTsm1" >
+                                <input type="number" class=" w-100 m-1 tsm1">
+                                <input type="number" class=" w-100 m-1 totalTsm1">
                             </div>
                             <div class="p-2">
-                                <input type="number" class=" w-100 m-1 tsm2"  >
-                                <input type="number" class=" w-100 m-1 totalTsm2"  >
+                                <input type="number" class=" w-100 m-1 tsm2">
+                                <input type="number" class=" w-100 m-1 totalTsm2">
                             </div>
                             <div class="p-2">
-                                <input type="number" class=" w-100 m-1 tsm3"  >
-                                <input type="number" class=" w-100 m-1 totalTsm3"  >
+                                <input type="number" class=" w-100 m-1 tsm3">
+                                <input type="number" class=" w-100 m-1 totalTsm3">
                             </div>
                         </td>
 
@@ -560,7 +599,507 @@ if (count($periodData) <= 0) {
             </div>
         </div>
     <?php } ?>
+    <?php foreach ($periodDataOld as $rowOld) { ?>
+        <div class="row mb-3 old">
+            <div class="col-md-3">
+                <div class="border p-3">
+                    <p><strong>Subject:</strong> <?= $rowOld["sub"] ?></p>
+                    <p><strong>Class:</strong> <?= $rowOld["class"] ?></p>
+                    <p><strong>Time:</strong> <?= $rowOld["start"] ?> - <?= $rowOld["end"] ?></p>
+                    <p><strong>Student No:</strong> <?= $rowOld["noStu"] ?></p>
+                </div>
+            </div>
 
+            <div class="col-md-9 mb-5">
+                <table class="table table-bordered" id="pmain-<?= $periodDataCount ?>">
+                    <span id="pid<?php echo $periodDataCount ?>"
+                          style="display: none;"><?php echo $rowOld["no"] ?></span>
+
+
+                    <tr>
+                        <td class="col-4">
+                            <label for="sub"><b>科目/MATA PELAJARAN:</b></label>
+                        </td>
+                        <td>
+                            <b id="<?php echo $rowOld["sub"] ?>"><?php echo $rowOld["sub"] ?></b>
+                            <span class="input-text-<?php echo $periodDataCount ?> " style="display: none"
+                                  id="sub"><?php echo $rowOld["sub"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="tema"><b>主题/TEMA:</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px"
+                                    id="<?php echo $rowOld["sub"] ?>" class="tema">
+                                <i class="fas fa-angle-right fa-lg"></i>
+                            </button>
+                            <br>
+                            <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>"
+                                  id="tema"><?php echo $rowOld["tema"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="tajuk"><b>单元/TAJUK:</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px" class="tajuk"><i
+                                        class="fas fa-angle-right fa-lg"></i></button>
+                            <br>
+                            <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>"
+                                  id="tajuk"><?php echo $rowOld["tajuk"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="kdg"><b>内容标准/STANDARD KANDUNGAN:</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px" class="kdg"><i
+                                        class="fas fa-angle-right fa-lg"></i></button>
+                            <br>
+                            <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>"
+                                  id="kdg"><?php echo $rowOld["kdg"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="cstd"><b>学习标准/STANDARD PEMBELAJARAN:</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px" class="cstd"><i
+                                        class="fas fa-angle-right fa-lg"></i></button>
+                            <br>
+                            <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>"
+                                  id="cstd"><?php echo $rowOld["cstd"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="op"><b>学习目标/OBJEKTIF PEMBELAJARAN (OP):</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px" class="op"><i
+                                        class="fas fa-angle-right fa-lg"></i></button>
+                            <br>
+                            <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>"
+                                  id="op"><?php echo $rowOld["op"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="kk"><b>达标准则/KRITERIA KEJAYAAN (KK):</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px" class="kk"><i
+                                        class="fas fa-angle-right fa-lg"></i></button>
+                            <br>
+                            <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>"
+                                  id="kk"><?php echo $rowOld["kk"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="apm"><b>导入(引起动机)/AKTIVITI PERMULAAN:</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px" class="apm"><i
+                                        class="fas fa-angle-right fa-lg"></i></button>
+                            <br>
+                            <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>"
+                                  id="apm"><?php echo $rowOld["apm"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="au"><b>教学活动/AKTIVITI UTAMA:</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px" class="au"><i
+                                        class="fas fa-angle-right fa-lg"></i></button>
+                            <br>
+                            <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>"
+                                  id="au"><?php echo $rowOld["au"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="apn"><b>结束/AKTIVITI PENUTUP:</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px" class="apn"><i
+                                        class="fas fa-angle-right fa-lg"></i></button>
+                            <br>
+                            <span class="input<?php echo $periodDataCount ?>  input-text-<?php echo $periodDataCount ?>"
+                                  id="apn"><?php echo $rowOld["apn"] ?></span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="emk"><b>跨课程元素/EMK:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                    name="emk"
+                                    id="emk">
+                                <option value=""></option>
+                                <?php
+                                $sql3 = "SELECT * FROM emk";
+                                $result3 = $conn->query($sql3);
+                                for ($a = 0; $a < $result3->num_rows; $a++) {
+                                    $row3 = $result3->fetch_assoc();
+                                    $selected = ($rowOld["emk"] == $row3['emk']) ? "selected" : "";
+                                    echo "<option value='" . $row3['emk'] . "' $selected>" . $row3['emk'] . "</option>";
+                                }
+                                ?>
+
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="nilai"><b>道德价值/NILAI:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>"
+                                    name="nilai"
+                                    id="nilai">
+                                <option value=""></option>
+                                <?php
+                                $sql4 = "SELECT * FROM nilai";
+                                $result4 = $conn->query($sql4);
+                                for ($a = 0; $a < $result4->num_rows; $a++) {
+                                    $row4 = $result4->fetch_assoc();
+                                    $selected = ($rowOld["nilai"] == $row4['nilai']) ? "selected" : "";
+                                    echo "<option value='" . $row4['nilai'] . "' $selected>" . $row4['nilai'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="abm"><b>教具/ABM/BBM:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>"
+                                    name="abm"
+                                    id="abm">
+                                <option value=""></option>
+                                <?php
+                                $sql5 = "SELECT * FROM bbm";
+                                $result5 = $conn->query($sql5);
+                                for ($a = 0; $a < $result5->num_rows; $a++) {
+                                    $row5 = $result5->fetch_assoc();
+                                    $selected = ($rowOld["abm"] == $row5['bbm']) ? "selected" : "";
+                                    echo "<option value='" . $row5['bbm'] . "' $selected>" . $row5['bbm'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="kb"><b>思维技能/KEMAHIRAN BERFIKIR:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>"
+                                    name="kb"
+                                    id="kb">
+                                <option value=""></option>
+                                <?php
+                                $sql6 = "SELECT * FROM `pemikiran`";
+                                $result6 = $conn->query($sql6);
+                                for ($a = 0; $a < $result6->num_rows; $a++) {
+                                    $row6 = $result6->fetch_assoc();
+                                    $selected = ($rowOld["kb"] == $row6['pemikiran']) ? "selected" : "";
+                                    echo "<option value='" . $row6['pemikiran'] . "' $selected>" . $row6['pemikiran'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="peta"><b>思路图/PETA i-THINK:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>"
+                                    name="peta"
+                                    id="peta">
+                                <option value=""></option>
+                                <?php
+                                $sql8 = "SELECT * FROM `peta`";
+                                $result8 = $conn->query($sql8);
+                                for ($a = 0; $a < $result8->num_rows; $a++) {
+                                    $row8 = $result8->fetch_assoc();
+                                    $selected = ($rowOld["peta"] == $row8['peta']) ? "selected" : "";
+                                    echo "<option value='" . $row8['peta'] . "' $selected>" . $row8['peta'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="tahap"><b>课堂评估/PBD:</b></label>
+                        </td>
+                        <td>
+                            <input class="input<?php echo $periodDataCount ?> txt input-txt-<?php echo $periodDataCount ?>"
+                                   type="text" name="pbd" value="<?php echo $rowOld["pbd"] ?>">
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="tahap"><b>表现标准/Tahap PBS:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                    name="tahap"
+                                    id="tahap">
+                                <option value=""></option>
+                                <?php
+                                $sql9 = "SELECT * FROM `tahap`";
+                                $result9 = $conn->query($sql9);
+                                for ($a = 0; $a < $result9->num_rows; $a++) {
+                                    $row9 = $result9->fetch_assoc();
+                                    $selected = ($rowOld["tahap"] == $row9['tahap']) ? "selected" : "";
+                                    echo "<option value='" . $row9['tahap'] . "' $selected>" . $row9['tahap'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="akt21"><b>21世纪教学法/AKTIVITI PAK 21:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                    name="akt21"
+                                    id="akt21">
+                                <option value=""></option>
+                                <?php
+                                $sql7 = "SELECT * FROM `akt21`";
+                                $result7 = $conn->query($sql7);
+                                for ($a = 0; $a < $result7->num_rows; $a++) {
+                                    $row7 = $result7->fetch_assoc();
+
+                                    $selected = ($rowOld["akt21"] == $row7['aktiviti']) ? "selected" : "";
+                                    echo "<option value='" . $row7['aktiviti'] . "' $selected>" . $row7['aktiviti'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="p21"><b>21世纪学习法/PAK-21:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                    name="p21"
+                                    id="p21">
+                                <option value=""></option>
+                                <?php
+                                $sql14 = "SELECT * FROM `p21`";
+                                $result14 = $conn->query($sql14);
+                                for ($a = 0; $a < $result14->num_rows; $a++) {
+                                    $row14 = $result14->fetch_assoc();
+
+                                    $selected = ($rowOld["p21"] == $row14['p21']) ? "selected" : "";
+                                    echo "<option value='" . $row14['p21'] . "' $selected>" . $row7['aktiviti'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="praujian"><b>前测/Praujian:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                    name="praujian"
+                                    id="praujian">
+                                <option value=""></option>
+                                <?php
+                                $sql15 = "SELECT * FROM `ujian`";
+                                $result15 = $conn->query($sql15);
+                                for ($a = 0; $a < $result15->num_rows; $a++) {
+                                    $row15 = $result15->fetch_assoc();
+                                    $selected = ($rowOld["praujian"] == $row15['type']) ? "selected" : "";
+                                    echo "<option value='" . $row15['type'] . "' $selected>" . $row15['type'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="pascaujian"><b>后测/Pascaujian:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                    name="pascaujian"
+                                    id="pascaujian">
+                                <option value=""></option>
+                                <?php
+                                $sql16 = "SELECT * FROM `ujian`";
+                                $result16 = $conn->query($sql16);
+                                for ($a = 0; $a < $result16->num_rows; $a++) {
+                                    $row16 = $result16->fetch_assoc();
+                                    $selected = ($rowOld["pascaujian"] == $row16['type']) ? "selected" : "";
+                                    echo "<option value='" . $row16['type'] . "' $selected>" . $row16['type'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="6k"><b>6 种'K'元素/Kemahiran 6K:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                    name="6k"
+                                    id="6k">
+                                <option value=""></option>
+                                <?php
+                                $sql17 = "SELECT * FROM `kemahiran`";
+                                $result17 = $conn->query($sql17);
+                                for ($a = 0; $a < $result17->num_rows; $a++) {
+                                    $row17 = $result17->fetch_assoc();
+                                    $selected = ($rowOld["6k"] == $row17['kemahiran']) ? "selected" : "";
+                                    echo "<option value='" . $row17['kemahiran'] . "' $selected>" . $row17['kemahiran'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="aspirasi"><b>学生愿景/Aspirasi Murid:</b></label>
+                        </td>
+                        <td>
+                            <select style="width:600px; height:35px"
+                                    class="input<?php echo $periodDataCount ?>   input-txt-<?php echo $periodDataCount ?>"
+                                    name="aspirasi"
+                                    id="aspirasi">
+                                <option value=""></option>
+                                <?php
+                                $sql18 = "SELECT * FROM `aspirasi`";
+                                $result18 = $conn->query($sql18);
+                                for ($a = 0; $a < $result18->num_rows; $a++) {
+                                    $row18 = $result18->fetch_assoc();
+                                    $selected = ($rowOld["aspirasi"] == $row18['aspirasi']) ? "selected" : "";
+                                    echo "<option value='" . $row18['aspirasi'] . "' $selected>" . $row18['aspirasi'] . "</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                    </tr>
+
+                    <!--Nút-->
+                    <tr>
+                        <td>
+                            <label for="refleksi"><b>反思/REFLEKSI:</b></label>
+                        </td>
+                        <td>
+                            <button style="width:50px; height:25px; border-radius: 10px" class="refleksi"><i
+                                        class="fas fa-angle-right fa-lg"></i></button>
+                            <br>
+                            <?php
+                            $data = json_decode($rowOld['inputRefleksi']);
+                            $tsm = json_decode($rowOld['tsm']);
+                            $text = nl2br(htmlspecialchars($rowOld["refleksi"]));
+                            $resultTsm = [];
+                            foreach ($tsm as $value) {
+                                preg_match_all('/\d+/', $value, $matches);
+                                $resultTsm[] = [$matches[0][0] ?? 1, $matches[0][1]] ?? 1; // Lấy 2 số đầu tiên
+                            }
+
+                            ?>
+                            <span class="input<?php echo $periodDataCount ?> input-text-<?php echo $periodDataCount ?>"
+                                  id="refleksi" name="refleksi"><?php echo $text ?></span><br>
+                            <span class="input<?php echo $periodDataCount ?> input-txt-<?php echo $periodDataCount ?>"
+                                  id="inputRefleksi" name="inputRefleksi">
+                                      <?php foreach ($data as $key => $number) { ?>
+                                          <input id="int<?php echo $key ?>" type="number" min="1" required=""
+                                                 style="margin: 8px; width: 50px; height: 30px;"
+                                                 value="<?php echo (int)$number ?>">
+                                      <?php } ?>
+
+                                </span>
+                        </td>
+                    </tr>
+
+                    <tr style="display: none" id="moral" class="krmj<?php echo $periodDataCount ?>">
+                        <td class="col-4">
+                            <label for="krmj"><b>S3.3 Krmj (Johor sahaja):</b></label>
+                        </td>
+                        <td class="col-8">
+                            <span class="input<?php echo $periodDataCount ?> word" id="krmj">3.3.5.5-Mengamalkan Seni Budaya Johor (Gaya kepimpinan Johor ditampil dan ditonjolkan melalui aktiviti murid.)</span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <label for="tsm"><b>后续作业/TUGASAN SUSULAN MURID:</b></label>
+                        </td>
+                        <td class="d-flex justify-content-between textarea-table-<?php echo $periodDataCount ?> input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>"
+                            id="tsm-<?php echo $periodDataCount ?>">
+                            <?php foreach ($resultTsm as $key => $tsm) { ?>
+                                <div class="p-2">
+                                    <input type="number" class=" w-100 m-1 tsm<?php echo $key ?>"
+                                           value="<?php echo $tsm[0] ?? 1 ?>">
+                                    <input type="number" class=" w-100 m-1 totalTsm<?php echo $key ?>"
+                                           value="<?php echo $tsm[1] ?? 1 ?>">
+                                </div>
+                            <?php } ?>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <?php $periodDataCount++;
+    } ?>
 </div>
 <button type="submit" class="me-5 px-5 py-2 btn btn-primary" name="submit" id='submit'>SUBMIT</button>
 <br>
@@ -591,7 +1130,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     // Đặt sự kiện DOMContentLoaded để chạy trước khi tải trang
     document.addEventListener('DOMContentLoaded', function () {
         // Kiểm tra và xóa cookie 'selectField'
-        checkAndDeleteCookie('selectField');
+       // checkAndDeleteCookie('selectField');
     });
 </script>
 <script>
@@ -618,13 +1157,13 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         // Kiểm tra điều kiện: không null, không undefined, tồn tại và bằng content
         if (text.trim() !== "" && text === content) {
             return false;
-        } else if(join == false) {
+        } else if (join == false) {
             input.textContent = content; // Cập nhật nội dung nếu khác
             return true;
-        }else{
+        } else {
             let separator = "<br>";
             let mula = content.join(separator);
-            input.innerHTML = mula ;
+            input.innerHTML = mula;
             return true;
         }
     }
@@ -734,6 +1273,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         });
         selectField[result] = data
         setCookie('selectField', JSON.stringify(selectField), 7);
+
         $.ajax({
             type: "POST",
             url: 'getPresetData.php',
@@ -797,7 +1337,6 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         });
     }
 
-
     let table = document.getElementsByClassName('table');
     let kdgbtn = document.getElementsByClassName('kdg');
     let cstdbtn = document.getElementsByClassName('cstd');
@@ -809,6 +1348,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     let refleksibtn = document.getElementsByClassName('refleksi');
 
     for (let i = 0; i < kdgbtn.length; i++) {
+        console.log('kdgbtn.length',kdgbtn.length);
         kdgbtn[i].onclick = function () {
             getnum = get(i);
             result = pass(getnum);
@@ -890,7 +1430,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let cstd = document.querySelector('#cstd.input' + result);
 
         setTimeout(() => {
-            suggest(formData,true, checkChangeInput(cstd, a, true) );
+            suggest(formData, true, checkChangeInput(cstd, a, true));
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -941,7 +1481,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
         setTimeout(() => {
             $('#op-sp' + result).text('');
-            suggest(formData,true, checkChangeInput(op, a, true) );
+            suggest(formData, true, checkChangeInput(op, a, true));
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -989,7 +1529,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let kk = document.querySelector('#kk.input' + result);
 
         setTimeout(() => {
-            suggest(formData,true, checkChangeInput(kk, a, true) );
+            suggest(formData, true, checkChangeInput(kk, a, true));
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -1043,7 +1583,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let a = (formData.getAll("apm"));
         let apm = document.querySelector('#apm.input' + result);
         setTimeout(() => {
-            suggest(formData,true, checkChangeInput(apm, a, true) );
+            suggest(formData, true, checkChangeInput(apm, a, true));
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -1098,7 +1638,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let a = (formData.getAll("au"));
         let au = document.querySelector('#au.input' + result);
         setTimeout(() => {
-            suggest(formData,true, checkChangeInput(au, a, true) );
+            suggest(formData, true, checkChangeInput(au, a, true));
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -1154,7 +1694,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         let a = (formData.getAll("apn"));
         let apn = document.querySelector('#apn.input' + result);
         setTimeout(() => {
-            suggest(formData,true, checkChangeInput(apn, a, true) );
+            suggest(formData, true, checkChangeInput(apn, a, true));
         }, 0); // Chạy sau vòng lặp hiện tại
     }
 
@@ -1311,7 +1851,6 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
     $(document).ready(function () {
         $("#submit").click(function () {
-            updateStatus(<?=$day?>);
             if (tokenUser <= 0) {
                 alert("You have run out of tokens");
                 return false;
@@ -1321,7 +1860,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             uniqueArray.push(uniqueArrays);
             uniqueArray.push(array);
 
-            if (penggal.value == '' || minggu.value == '') {
+            if (penggal.value !== '' || minggu.value !== '') {
                 alert("Please fill in the penggal and minggu");
                 return false;
             } else {
@@ -1385,8 +1924,8 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 });
 
 
-                console.log("ans",ans)
-                console.log("nameRefleksi",{["nameRefleksi"]: $('#refleksi').text()})
+                console.log("ans", ans)
+                console.log("nameRefleksi", {["nameRefleksi"]: $('#refleksi').text()})
                 save(JSON.stringify(ans))
             }
 
@@ -1394,7 +1933,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         });
 
         function save(data) {
-            console.log('pmain',data)
+            console.log('pmain', data)
             $.ajax({
                 url: 'saveProcess.php',
                 type: 'POST',
@@ -1406,8 +1945,11 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
                         if (responseData.status === 'success') {
                             // Gọi lệnh cập nhật vào cơ sở dữ liệu sau khi API thành công
-                            updateStatus(day);
-                            updateToken();
+                            if ($('.new').length >= 1) {
+                                updateStatus(day);
+                                updateToken();
+                            }
+
                             alert(responseData.message);
                         } else {
                             // Hiển thị thông báo lỗi
@@ -1447,6 +1989,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
             return result;
         }
+
         function getUrlParameter(name) {
             const urlParams = new URLSearchParams(window.location.search);
             return urlParams.get(name);
