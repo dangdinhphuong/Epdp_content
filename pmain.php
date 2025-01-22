@@ -68,7 +68,7 @@ $periodDataCount2 = $periodDataCount = count($periodData);
 $periodDataOld = $resultOld->fetch_all(MYSQLI_ASSOC);
 
 $fields = ['tema', 'tajuk', 'kdg', 'cstd', 'op', 'kk', 'apm', 'au', 'apn'];
-$output  = [];
+$output = [];
 
 foreach ($periodDataOld as $index => $item) {
     $output[$periodDataCount2] = [];
@@ -78,22 +78,8 @@ foreach ($periodDataOld as $index => $item) {
     $periodDataCount2++;
 }
 
-// Chuyển $output thành JSON với định dạng đẹp
-$jsonOutput = json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
-// Thiết lập cookie với thời gian sống là 7 ngày
-setcookie('selectField', $jsonOutput, time() + (7 * 24 * 60 * 60), '/');
-
-// Sau khi thiết lập cookie, bạn có thể lấy giá trị cookie và giải mã
-if (isset($_COOKIE['selectField'])) {
-    $selectFields = json_decode($_COOKIE['selectField'], true); // Giải mã JSON
-    var_dump($selectFields);
-} else {
-    echo "Cookie 'selectField' chưa được thiết lập.";
-}
-die;
-
-if ($periodDataCount <= 0) {
+if ($periodDataCount <= 0 && count($periodDataOld) <= 0) {
     echo '<script>alert("Please set the period for this day")</script>';
     echo '<script>window.location.href="process.php"</script>';
 }
@@ -1084,7 +1070,7 @@ if ($periodDataCount <= 0) {
                         </td>
                         <td class="d-flex justify-content-between textarea-table-<?php echo $periodDataCount ?> input<?php echo $periodDataCount ?>  input-txt-<?php echo $periodDataCount ?>"
                             id="tsm-<?php echo $periodDataCount ?>">
-                            <?php foreach ($resultTsm as $key => $tsm) { ?>
+                            <?php foreach ($resultTsm as $key => $tsm) {  $key++?>
                                 <div class="p-2">
                                     <input type="number" class=" w-100 m-1 tsm<?php echo $key ?>"
                                            value="<?php echo $tsm[0] ?? 1 ?>">
@@ -1111,13 +1097,24 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 ?>
 </body>
 <script>
+    let output = <?php echo json_encode($output); ?>; // Encode PHP variable into JSON format
+    let selectField = output; // Gán giá trị của output cho selectField
+
     // Hàm để xóa cookie
     function deleteCookie(name) {
         document.cookie = name + '=; Max-Age=0; path=/'; // Thiết lập thời gian sống của cookie bằng 0
     }
 
-    // Hàm để kiểm tra cookie
-    function checkAndDeleteCookie(name) {
+    // Hàm để lưu lại cookie (đổi tên từ setCookie thành saveCookie)
+    function saveCookie(name, value, days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Tính thời gian hết hạn
+        const cookieValue = JSON.stringify(value); // Dùng JSON.stringify để lưu dữ liệu phức tạp
+        document.cookie = `${name}=${cookieValue}; expires=${date.toUTCString()}; path=/`; // Lưu cookie
+    }
+
+    // Hàm để kiểm tra và xử lý cookie
+    function checkAndDeleteCookie(name, newValue) {
         const cookieValue = document.cookie.split('; ').find(row => row.startsWith(name + '='));
         if (cookieValue) {
             const value = cookieValue.split('=')[1]; // Lấy giá trị cookie
@@ -1125,16 +1122,19 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 deleteCookie(name); // Gọi hàm xóa cookie
             }
         }
+        // Lưu lại cookie với giá trị mới
+        saveCookie(name, newValue, 7); // Cookie có thời hạn 7 ngày
     }
 
     // Đặt sự kiện DOMContentLoaded để chạy trước khi tải trang
     document.addEventListener('DOMContentLoaded', function () {
-        // Kiểm tra và xóa cookie 'selectField'
-       // checkAndDeleteCookie('selectField');
+        // Kiểm tra và xóa cookie 'selectField', sau đó lưu lại với giá trị mới
+        checkAndDeleteCookie('selectField', output);
     });
+
+
 </script>
 <script>
-    let selectField = {};
     let tokenUser = <?php echo $tokenUser['token'] ?? 0; ?>;
     let t = document.getElementsByClassName('tema');
     let tajuk = document.getElementsByClassName('tajuk');
@@ -1348,7 +1348,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     let refleksibtn = document.getElementsByClassName('refleksi');
 
     for (let i = 0; i < kdgbtn.length; i++) {
-        console.log('kdgbtn.length',kdgbtn.length);
+        console.log('kdgbtn.length', kdgbtn.length);
         kdgbtn[i].onclick = function () {
             getnum = get(i);
             result = pass(getnum);
@@ -1860,7 +1860,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             uniqueArray.push(uniqueArrays);
             uniqueArray.push(array);
 
-            if (penggal.value !== '' || minggu.value !== '') {
+            if (penggal.value == '' || minggu.value == '') {
                 alert("Please fill in the penggal and minggu");
                 return false;
             } else {
@@ -1887,7 +1887,15 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                     for (let j = 0; j < input.length; j++) {
                         var nameKey = input[j].name ?? input[j].id;
                         result = {[nameKey]: input[j].value};
+
                         if (nameKey == "inputRefleksi") {
+                            inputArray = [];
+                            $('.input-txt-' + i + '[name="inputRefleksi"]').find('input').each(function () {
+                                inputArray.push($(this).val());
+                            });
+
+                            userInputArray[i] = inputArray;
+
                             result = {[nameKey]: userInputArray[i]};
                         }
 
@@ -1933,15 +1941,19 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         });
 
         function save(data) {
-            console.log('pmain', data)
+            console.log('pmain', data);
             $.ajax({
                 url: 'saveProcess.php',
                 type: 'POST',
                 data: data,
                 success: function (response) {
                     try {
+                        // Loại bỏ thẻ <pre> nếu có trong response
+                        const cleanedResponse = response.replace(/<pre>|<\/pre>/g, '').trim();
+
                         // Chuyển đổi chuỗi JSON thành đối tượng
-                        const responseData = JSON.parse(response);
+                        const responseData = JSON.parse(cleanedResponse);
+                        console.log('responseData', responseData);
 
                         if (responseData.status === 'success') {
                             // Gọi lệnh cập nhật vào cơ sở dữ liệu sau khi API thành công
@@ -1949,7 +1961,6 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                                 updateStatus(day);
                                 updateToken();
                             }
-
                             alert(responseData.message);
                         } else {
                             // Hiển thị thông báo lỗi
@@ -1967,6 +1978,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
             });
         }
 
+
         function mergeTextWithInputs(i) {
             let text = [
                 "_ / 位学生不能掌 握技能将额外辅导",
@@ -1979,9 +1991,10 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
 
             // Lặp qua từng cặp input (tsmX và totalTsmX)
             for (let j = 1; j <= text.length; j++) {
+
                 const tsmValue = container.find('.tsm' + j).val() || '0';
                 const totalTsmValue = container.find('.totalTsm' + j).val() || '0';
-
+                console.log('.tsm' + j, tsmValue)
                 // Kết hợp dữ liệu input vào text
                 const mergedText = text[j - 1].replace("_ /", `_ ${tsmValue} _ / _ ${totalTsmValue} __`).replace("位学生", `位学生 ${totalTsmValue}`);
                 result.push(mergedText);
@@ -2032,7 +2045,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                 data: {},
                 success: function (response) {
                     try {
-                        window.location.href = "process.php"
+                      //  window.location.href = "process.php"
                     } catch (e) {
                         // Nếu có lỗi khi parse JSON, hiển thị lỗi
                         alert('Error parsing response: ' + e.message);

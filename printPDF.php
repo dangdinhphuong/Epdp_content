@@ -335,11 +335,11 @@ function getColspan($col, $totalCol = 6)
                     </td>
 
                     <td class="d-print-inline-block"
-                        colspan="<?= getColspan(count(json_decode($result['tsm']))) ?>"> 巩固/PEMULIHAN
+                        colspan="<?= getColspan(count(json_decode($result['tsm']))) ?>"> 巩固/PENGUKUHAN
                     </td>
 
                     <td class="d-print-inline-block"
-                        colspan="<?= getColspan(count(json_decode($result['tsm']))) ?>"> 增广/PEMULIHAN
+                        colspan="<?= getColspan(count(json_decode($result['tsm']))) ?>"> 增广/PENGAYAAN
                     </td>
 
                 </tr>
