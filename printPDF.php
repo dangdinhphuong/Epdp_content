@@ -333,12 +333,12 @@ function getColspan($col, $totalCol = 6)
                     <td class="d-print-inline-block"
                         colspan="<?= getColspan(count(json_decode($result['tsm']))) ?>"> 辅导/PEMULIHAN
                     </td>
-
-                    <td class="d-print-inline-block"
+                    
+                     <td class="d-print-inline-block"
                         colspan="<?= getColspan(count(json_decode($result['tsm']))) ?>"> 巩固/PENGUKUHAN
                     </td>
-
-                    <td class="d-print-inline-block"
+                    
+                     <td class="d-print-inline-block"
                         colspan="<?= getColspan(count(json_decode($result['tsm']))) ?>"> 增广/PENGAYAAN
                     </td>
 
@@ -427,11 +427,11 @@ function getColspan($col, $totalCol = 6)
             }
         }
 
-        //  Lưu file PDF sau khi tất cả các bảng đã được in ra
-        pdf.save("data.pdf");
-
-        // Quay lại trang hiện tại sau khi tải xong PDF
-        window.history.back();  // Quay lại trang trước đó
+       //  Lưu file PDF sau khi tất cả các bảng đã được in ra
+          pdf.save("data.pdf");
+        
+          // Quay lại trang hiện tại sau khi tải xong PDF
+          window.history.back();  // Quay lại trang trước đó
     });
 </script>
 </body>

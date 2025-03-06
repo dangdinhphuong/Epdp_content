@@ -2047,6 +2047,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                     try {
                       //  window.location.href = "process.php"
                     } catch (e) {
+                        
                         // Nếu có lỗi khi parse JSON, hiển thị lỗi
                         alert('Error parsing response: ' + e.message);
                     }

@@ -25,16 +25,22 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 // Kiểm tra tham số 'file' trong URL để xử lý tải file
 if (isset($_GET['file'])) {
     $file = $_GET['file'];
-    $filePath = 'files/' . $file;
-
-    // Kiểm tra nếu file tồn tại
+    $filePath = __DIR__ . '/files/' . $file;
+    
     if (file_exists($filePath)) {
-        // Set các header để trình duyệt hiểu đây là file tải xuống
+        // Xóa bộ nhớ đệm để tránh lỗi file hỏng
+        ob_clean();
+        flush();
+
+        // Thiết lập header để tải file Excel
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="' . basename($file) . '"');
         header('Content-Length: ' . filesize($filePath));
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Expires: 0');
+        header('Pragma: public');
 
-        // Đọc và gửi file cho trình duyệt
+        // Đọc file và gửi cho trình duyệt
         readfile($filePath);
         exit;
     } else {
@@ -42,36 +48,6 @@ if (isset($_GET['file'])) {
         exit;
     }
 }
-
-// Tạo file Excel mẫu nếu không có yêu cầu tải
-if (!isset($_GET['file'])) {
-    $spreadsheet = new Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
-
-    // Thiết lập các header cho file Excel
-    $sheet->setCellValue('A1', 'Email');
-    $sheet->setCellValue('B1', 'Username');
-    $sheet->setCellValue('C1', 'No tel');
-    $sheet->setCellValue('D1', 'Credit');
-    $sheet->setCellValue('E1', 'Status');
-
-    // Thêm một số dữ liệu mẫu vào file Excel (có thể bỏ qua nếu chỉ muốn header)
-    $sheet->setCellValue('A2', 'example@example.com');
-    $sheet->setCellValue('B2', 'user1');
-    $sheet->setCellValue('C2', '123456789');
-    $sheet->setCellValue('D2', '100');
-    $sheet->setCellValue('E2', '1');
-
-    // Tạo file Excel và lưu vào thư mục files/
-    $writer = new Xlsx($spreadsheet);
-    $filePath = 'files/sample.xlsx'; // Lưu file vào thư mục files/
-    // Kiểm tra nếu thư mục 'files' có tồn tại
-    if (!is_dir(__DIR__ . '/files/')) {
-        mkdir(__DIR__ . '/files/', 0777, true);  // Tạo thư mục nếu không có
-    }
-    $writer->save($filePath);
-}
-
 
 function importExcelFile($fileData, $conn)
 {
@@ -451,12 +427,7 @@ function readcsv($file)
 
 <body style="margin:50px 50px 0 50px;">
 
-<b style="font-size:35px">MyPDP</b>
-<span style="font-size:20px; float: right; margin-right: 80px"><a href="../logout.php">LOGOUT</a></span>
-<span style="font-size:18px; float: right; margin-right: 50px">ADMIN</span>
-<br>
-<hr>
-<br>
+<?php include './layout/menu.php'; ?>
 <form action="" method="POST">
     <div style="margin: 0px 80px 0 0; float:right">
         <input style="width:250px; height:30px; border-radius: 10px" type="text" name="search">

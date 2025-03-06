@@ -83,6 +83,7 @@ try {
     echo json_encode(['status' => 'success', 'message' => 'Data processed successfully!']);
 } catch (mysqli_sql_exception $e) {
     $conn->rollback(); // Hoàn tác nếu có lỗi
+    
     echo json_encode(['status' => 'error', 'message' => 'Database error: ' . $e->getMessage() . $e->getLine()]);
 }
 

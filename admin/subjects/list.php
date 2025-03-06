@@ -153,12 +153,7 @@ if (isset($_POST["add"])) {
 
 <body style="margin:50px 50px 0 50px;">
 
-<b style="font-size:35px">MyPDP</b>
-<span style="font-size:20px; float: right; margin-right: 80px"><a href="../../logout.php">LOGOUT</a></span>
-<span style="font-size:18px; float: right; margin-right: 50px">ADMIN</span>
-<br>
-<hr>
-<br>
+<?php include '../layout/menu.php'; ?>
 <form action="" method="POST">
     <div style="margin: 0px 80px 0 0; float:right">
         <input style="width:250px; height:30px; border-radius: 10px" type="text" name="search">
