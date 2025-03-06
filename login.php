@@ -20,7 +20,6 @@ if (session_status() === PHP_SESSION_NONE) {
             box-sizing: border-box;
         }
 
-        /* Add padding to containers */
         .container {
             padding: 16px;
             background-color: #DADBDD;
@@ -29,7 +28,6 @@ if (session_status() === PHP_SESSION_NONE) {
             margin-top: 5%;
         }
 
-        /* Full-width input fields */
         input[type=text], input[type=password] {
             width: 100%;
             padding: 15px;
@@ -44,13 +42,11 @@ if (session_status() === PHP_SESSION_NONE) {
             outline: none;
         }
 
-        /* Overwrite default styles of hr */
         hr {
             border: 1px solid #f1f1f1;
             margin-bottom: 25px;
         }
 
-        /* Set a style for the submit button */
         .loginbtn {
             background: #009dff;
             color: white;
@@ -96,23 +92,23 @@ if (session_status() === PHP_SESSION_NONE) {
 <?php include 'header.php'; ?>
 <?php include 'db.php'; ?>
 <?php
-$errors = []; // Mảng lưu lỗi
+$errors = []; // Array to store errors
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
     $email = trim($_POST['email']);
     $password = trim($_POST['pwd']);
 
-    // Kiểm tra email và mật khẩu có trống không
+    // Check if email and password are empty
     if (empty($email)) {
-        $errors['email'] = "Vui lòng nhập email.";
+        $errors['email'] = "Please enter your email.";
     } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = "Email không hợp lệ.";
+        $errors['email'] = "Invalid email format.";
     }
 
     if (empty($password)) {
-        $errors['password'] = "Vui lòng nhập mật khẩu.";
+        $errors['password'] = "Please enter your password.";
     }
 
-    // Nếu không có lỗi, kiểm tra trong database
+    // If no errors, check in the database
     if (empty($errors)) {
         $sqlCheck = "SELECT * FROM user WHERE email = ?";
         $stmt = $conn->prepare($sqlCheck);
@@ -136,10 +132,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
                     exit;
                 }
             } else {
-                $errors['password'] = "Sai mật khẩu.";
+                $errors['password'] = "Incorrect password.";
             }
         } else {
-            $errors['email'] = "Email không tồn tại.";
+            $errors['email'] = "Email does not exist.";
         }
         $stmt->close();
     }
@@ -149,14 +145,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
     <div class="container" id="field">
         <h1 style="text-align:center">MyPDP</h1>
         <hr>
-        <!-- <hr> -->
 
         <label for="email"><b>Email</b></label>
         <input type="text" placeholder="Enter Email" name="email" id="email" required>
         <?php if (isset($errors['email'])): ?>
             <p class="text-danger"><?php echo $errors['email']; ?></p>
         <?php endif; ?>
-          <br>
+        <br>
         <br>
         <label for="password"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="pwd" id="pwd" required>
@@ -168,7 +163,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])) {
         <button type="submit" class="loginbtn" name="login">LOGIN</button>
         <p style="text-align: center"><a href="forgotpwd.php">FORGOT PASSWORD</a></p>
     </div>
-
 </form>
 
 </body>

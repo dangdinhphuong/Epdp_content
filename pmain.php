@@ -1153,7 +1153,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     function checkChangeInput(input, content, join = false) {
         // Lấy giá trị của input.text()
         const text = input.textContent || input.innerText || ""; // Xử lý đa nền tảng
-
+console.log(input, content)
         // Kiểm tra điều kiện: không null, không undefined, tồn tại và bằng content
         if (text.trim() !== "" && text === content) {
             return false;
@@ -1234,8 +1234,19 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                     });
                 };
             }
+  
 
         }
+    }
+
+    function tjk(formData) {
+        // Do something with the form data
+        let a = (formData.get("tajuk"));
+        let taj = document.querySelector('#tajuk.input' + result);
+        console.log('formData',a)
+        setTimeout(() => {
+            suggest(formData, false, checkChangeInput(taj, a));
+        }, 0); // Chạy sau vòng lặp hiện tại;
     }
 
     function setCookie(name, value, days) {
@@ -1248,14 +1259,6 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
         document.cookie = name + "=" + (value || "") + expires + "; path=/";
     }
 
-    function tjk(formData) {
-        // Do something with the form data
-        let a = (formData.get("tajuk"));
-        let taj = document.querySelector('#tajuk.input' + result);
-        setTimeout(() => {
-            suggest(formData, false, checkChangeInput(taj, a));
-        }, 0); // Chạy sau vòng lặp hiện tại;
-    }
 
     function suggest(formData, show = true, inputChange) {
         let fields = ['tema', 'tajuk', 'kdg', 'cstd', 'op', 'kk', 'apm', 'au', 'apn'];
@@ -1288,6 +1291,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                         $(`#${field}.input${result}`).text('');
                     }
                 });
+
                 if (show) {
                     if (response.length >= 1) {
                         // Nếu có dữ liệu trả về, hiển thị nội dung mới vào <span> nếu chưa có dữ liệu
@@ -1295,6 +1299,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
                             fields.forEach(field => {
                                 if (record[field]) {
                                     $(`#${field}-sp${result}`).remove();
+                        
                                     let element = document.querySelector(`#${field}.input${result}`);
 
                                     if (element && data[field] == '') {
