@@ -71,11 +71,12 @@ function getData($field)
 
 function renderInputForm($field, $type = 'radio')
 {
-    global $conn, $presetData, $selected; // Sử dụng biến toàn cục
+    global $conn, $presetData, $selected;
     getSelectedValue();
 
     echo "<form id='" . htmlspecialchars($field) . "' method='POST'>";
 
+    // Lấy dữ liệu theo điều kiện
     $data = [];
     if ($field === 'tema') {
         $sql = "SELECT `$field` FROM `preset` GROUP BY `$field`";
@@ -96,31 +97,55 @@ function renderInputForm($field, $type = 'radio')
         }
     }
 
+    // Loại bỏ phần tử trùng lặp
     $data = array_unique($data);
 
-    // Nếu là checkbox, chuyển `$selected` thành mảng
-    if ($type === 'checkbox') {
-        $selectedValues = is_array($selected) ? $selected : explode(',', $selected);
-    } else {
-        $selectedValues = [$selected]; // Để so sánh với radio
-    }
+    // Nếu type là checkbox, ta cần lưu giá trị được chọn vào mảng
+    $selectedValues = is_array($selected) ? $selected : [$selected];
 
+    // Hiển thị radio hoặc checkbox
     foreach ($data as $value) {
         if (!empty($value)) {
             $value = preg_replace(['/\/n/', '/\/r/'], ["\n", "\r"], $value);
             $escapedValue = preg_replace('/\s+/', ' ', htmlspecialchars($value, ENT_QUOTES));
 
-            // Kiểm tra nếu giá trị đã chọn
-            $isChecked = in_array($escapedValue, $selectedValues) ? 'checked' : '';
+            // Nếu là checkbox, kiểm tra mảng giá trị
+            if ($type === 'checkbox') {
+                $isChecked = in_array($escapedValue, $selectedValues) ? 'checked' : '';
+                $nameAttr = "nameInput[]";
+            } else {
+                $isChecked = $escapedValue == preg_replace('/\s+/', ' ', $selected) ? 'checked' : '';
+                $nameAttr = "nameInput";
+            }
 
-            // Tạo input
-            $html = "<input style='margin:20px 0 0 20px; float: left;' type='" . $type . "' name='" . htmlspecialchars($field) . ($type === 'checkbox' ? '[]' : '') . "' value='" . nl2br(htmlspecialchars($value, ENT_QUOTES)) . "' $isChecked>";
-            $html .= "<span style='margin-left: 20px; float: left;'>" . nl2br(htmlspecialchars($value, ENT_QUOTES)) . "</span><br style='clear: both;'><br>";
-            echo $html;
+            echo "<input style='margin:20px 0 0 20px; float: left;' type='$type' name='$nameAttr' value='$escapedValue'  onchange=\"updateText('$type')\">";
+            echo "<span style='margin-left: 20px; float: left;'>$escapedValue</span><br style='clear: both;'><br>";
+
         }
     }
+    echo '<div style="margin: 20px 0 0 20px; display: flex; align-items: center;">
+    <input type="text" name='.htmlspecialchars($field).' id="mainInput" value="" style="width: 300px;">
+</div>';
+
 
     echo "<input style='margin:10px 0 10px 20px' name='submit' type='submit' value='SUBMIT'>";
     echo "</form>";
+
+    echo "<script>
+    function updateText(type) {
+        if (type == 'checkbox') {
+            let checkboxes = document.querySelectorAll('input[name=\"nameInput[]\"]:checked');
+            let selectedValues = Array.from(checkboxes).map(cb => cb.value).join('<br />');
+            document.getElementById('mainInput').value = selectedValues;
+        } else if (type == 'radio') {
+            let selectedRadio = document.querySelector('input[name=\"nameInput\"]:checked');
+            if (selectedRadio) {
+                document.getElementById('mainInput').value = selectedRadio.value;
+            }
+        }
+    }
+</script>";
+
 }
+
 ?>

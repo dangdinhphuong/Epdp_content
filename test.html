@@ -1,96 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hai input</title>
-    <script>
-        function getCombinedValue() {
-            const input1 = document.getElementById("part1").value;
-            const input2 = document.getElementById("part2").value;
-            const combinedValue = `${input1}/${input2}`;
-            alert(`Giá trị kết hợp: ${combinedValue}`); // Hiển thị giá trị
-            return combinedValue; // Trả về giá trị kết hợp
-        }
-    </script>
-</head>
-<body>
-<div style=" border: 1px solid; width: 110px; border-radius: 5px">
-<input id="int0" type="number" min="1" required="" style="width: 40px; height: 30px; border: none;  border-top-left-radius: 5px;  border-bottom-left-radius: 5px;">
-<span>/</span>
-<input id="total0" type="number" min="1" required="" style="width: 40px; height: 30px;  border: none">
-</div>
+<form id="tajuk" method="POST">
+    <div style="margin: 20px 0 0 20px; display: flex; align-items: center;">
+        <input type="checkbox" name="name[]" value="COUNTINGS FINGERS" onchange="updateText()">
+        <span style="margin-left: 10px;">COUNTINGS FINGERS</span>
+    </div>
 
-border-left-radius
-<br><br>
-<button onclick="getCombinedValue()">Lấy giá trị</button>
-</body>
-</html>
-for (let i = 0; i < input; i++) {
-// Tạo thẻ span để bọc hai input
-let spanWrapper = document.createElement('span');
-spanWrapper.style.display = 'inline-block'; // Giữ các input trong cùng một dòng
-spanWrapper.style.margin = '8px'; // Khoảng cách giữa các nhóm input
-spanWrapper.style.border = '1px solid'; // Thêm viền
-spanWrapper.style.borderRadius = '5px'; // Bo tròn viền
+    <div style="margin: 20px 0 0 20px; display: flex; align-items: center;">
+        <input type="checkbox" name="name[]" value="储蓄歌" onchange="updateText()">
+        <span style="margin-left: 10px;">储蓄歌</span>
+    </div>
 
-// Tạo input đầu tiên
-let newInput1 = document.createElement('input');
-newInput1.id = `int${i}`;
-newInput1.type = 'number';
-newInput1.min = '1';
-newInput1.required = true;
-newInput1.style.width = '50px';
-newInput1.style.height = '30px';
-newInput1.style.border = 'none'; // Xóa viền input
-newInput1.style.borderRadius = '5px'; // Xóa bo tròn của input
+    <div style="margin: 20px 0 0 20px; display: flex; align-items: center;">
+        <input type="text" name="tajuk" id="tajukInput" value="" style="width: 300px;">
+    </div>
 
-// Tạo label "/"
-let label = document.createElement('span');
-label.textContent = '/';
-label.style.margin = '0 8px'; // Khoảng cách giữa hai input
+    <div style="margin: 10px 0 10px 20px;">
+        <input name="submit" type="submit" value="SUBMIT">
+    </div>
+</form>
 
-// Tạo input thứ hai
-let newInput2 = document.createElement('input');
-newInput2.id = `total${i}`;
-newInput2.type = 'number';
-newInput2.min = '1';
-newInput2.required = true;
-newInput2.style.width = '50px';
-newInput2.style.height = '30px';
-newInput2.style.border = 'none'; // Xóa viền input
-newInput2.style.borderRadius = '5px'; // Xóa bo tròn của input
-
-// Append các phần tử vào thẻ span
-spanWrapper.appendChild(newInput1);
-spanWrapper.appendChild(label);
-spanWrapper.appendChild(newInput2);
-
-// Append thẻ span vào container (inputRef)
-inputRef.appendChild(spanWrapper);
-
-// Xử lý sự kiện cho từng input
-newInput1.addEventListener('input', function (event) {
-let userInput = event.target.value;
-if (userInput < 1) {
-event.target.setCustomValidity('Please enter a positive number.'); // Hiển thị thông báo lỗi
-} else {
-event.target.setCustomValidity(''); // Xóa thông báo lỗi
-array[i] = userInput; // Lưu giá trị vào mảng
-inputArray = array.filter(Boolean); // Lọc các giá trị hợp lệ
-userInputArray[result] = inputArray;
-}
-});
-
-newInput2.addEventListener('input', function (event) {
-let userInput = event.target.value;
-if (userInput < 1) {
-event.target.setCustomValidity('Please enter a positive number.'); // Hiển thị thông báo lỗi
-} else {
-event.target.setCustomValidity(''); // Xóa thông báo lỗi
-array[i] = userInput; // Lưu giá trị vào mảng
-inputArray = array.filter(Boolean); // Lọc các giá trị hợp lệ
-userInputArray[result] = inputArray;
-}
-});
-}
+<script>
+    function updateText() {
+        let checkboxes = document.querySelectorAll('input[name="name[]"]:checked');
+        let selectedValues = Array.from(checkboxes).map(cb => cb.value).join("<br />");
+        document.getElementById('tajukInput').value = selectedValues;
+    }
+</script>
