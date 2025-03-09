@@ -1348,7 +1348,7 @@ $tokenUser = $conn->query($sql)->fetch_assoc();
     let refleksibtn = document.getElementsByClassName('refleksi');
 
     for (let i = 0; i < kdgbtn.length; i++) {
-        console.log('kdgbtn.length', kdgbtn.length);
+     
         kdgbtn[i].onclick = function () {
             getnum = get(i);
             result = pass(getnum);
