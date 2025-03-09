@@ -1,0 +1,215 @@
+@charset "utf-8";
+
+@media only screen and (max-width: 699px) and (min-width: 320px)  {
+  #container{
+    margin-top: 35%;
+    width: 65%;
+  }
+  #field{
+    width:70%;
+  }
+  #collapsetable {
+    width:60%;
+    margin:50px 0 0 0;
+    text-align: center;
+  }
+  input.txt{
+    width: 260px;    
+  }
+  .outerbox #window{
+    width: 80%;
+    height: 55%;
+    margin-top: 60px;
+    margin-left: 10%;
+    font-size: 23px;
+  }
+  #window_button .confirm_button{
+    width: 60%;
+    height: 40%;
+  }
+  #confirm{
+    margin-right: 20%;
+  }
+  #cancel{
+    margin-left: 20%;
+  }
+  .body-list ul li{
+    font-size: 16px;
+  }
+  #monthnYear {
+    font-size: 24px;
+    margin-right: 15px;
+  }
+  /* body {
+    background-color: lightgrey;
+  } */
+  #search{
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 999px) and (min-width: 700px)  {
+  #container{
+    margin-top: 20%;
+    width: 80%;
+  }
+  #field{
+    width:80%;
+  }
+  #collapsetable {
+    width:80%;
+    margin:50px 0 0 0;
+    text-align: center;
+  }
+  input.txt{
+    width: 480px;    
+  }
+  .outerbox #window{
+    width: 80%;
+    height: 55%;
+    margin-top: 60px;
+    margin-left: 10%;
+  }
+  #window_button .confirm_button{
+    width: 55%;
+    height: 40%;
+  }
+  #confirm{
+    margin-right: 22%;
+  }
+  #cancel{
+    margin-left: 22%;
+  }
+  /* body {
+    background-color: lightblue;
+  } */
+  #search{
+      display: none;
+  }
+  /* #window_new{
+    padding: 16px;
+    background-color: blue;
+    width: 700px;
+    margin: auto;
+    margin-top: -8%;
+    margin-left: 5%;
+    font-size: 15px;
+    position: absolute;
+    text-align: center;
+  } */
+  /* tr{
+    display: block;
+  } */
+  .break {
+    float: left;
+    line-height: 22px;
+  }
+  /* .fill{
+    margin-left: 10%;
+  } */
+
+
+}
+
+@media only screen and (max-width: 1179px) and (min-width: 1000px)  {
+  #container{
+    margin-top: 20%;
+    width: 85%;
+  }
+  #collapsetable {
+      width:100%;
+      margin:50px 0 0 0;
+      text-align: center;
+  }
+  .outerbox #window{
+    width: 80%;
+    height: 55%;
+    margin-top: 60px;
+    margin-left: 10%;
+  }
+  #window_button .confirm_button{
+    width: 60%;
+    height: 45%;
+  }
+  #confirm{
+    margin-right: 20%;
+  }
+  #cancel{
+    margin-left: 20%;
+  }
+  /* body {
+  background-color: yellow;
+  } */
+  /* #window_new{
+    padding: 16px;
+    background-color: blue;
+    width: 700px;
+    margin: auto;
+    margin-top: -8%;
+    margin-left: 5%;
+    font-size: 15px;
+    position: absolute;
+    text-align: center;
+  } */
+}
+
+@media only screen and (max-width: 1299px) and (min-width: 1180px)  {
+  #container{
+    margin-top: 15%;
+    width: 90%;
+  }
+  #collapsetable {
+      width:120%;
+      margin:50px 0 0 0;
+      text-align: center;
+  }
+  .outerbox #window{
+    width: 80%;
+    height: 55%;
+    margin-top: 60px;
+    margin-left: 10%;
+  }
+  #window_button .confirm_button{
+    width: 60%;
+    height: 45%;
+  }
+  #confirm{
+    margin-right: 20%;
+  }
+  #cancel{
+    margin-left: 20%;
+  }
+  /* body {
+  background-color: orange;
+  } */
+}
+
+@media only screen and (min-width: 1300px) {
+  #container{
+    margin-top: 12%;
+    width: 95%;
+  }
+  #collapsetable {
+      width:150%;
+      margin:50px 0 0 0;
+      text-align: center;
+      
+  }
+  /* body {
+  background-color: white;
+  } */
+  
+  /* #window_new {
+    padding: 16px;
+    background-color: #ededed;
+    width: 800px;
+    margin: auto;
+    margin-top: -8%;
+    margin-left: 20%;
+    font-size: 15px;
+    display: none;
+    position: absolute;
+    text-align: center;
+} */
+
+}

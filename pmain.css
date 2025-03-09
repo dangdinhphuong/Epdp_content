@@ -1,0 +1,40 @@
+table{
+    border: 1px solid black;
+    width: 100%;    
+    border-spacing: 10px;    
+}
+/* .table-content {
+    width: 1000px;
+    text-align: center;
+} */
+
+  table label{
+    margin-left: 50px;
+    font-size: 18px;
+}
+
+.txt{
+    font-size:15px;
+    padding:8px;
+    display:block;
+    width:600px;
+    border:none;
+    border:1px solid #757575;
+}
+
+.word{
+    width:600px;
+    font-size:17px;
+    padding:8px;
+}
+
+a{ text-decoration: none }
+
+.btn{
+    float: right;
+    padding: 13px 60px 13px 60px;
+    background: #009dff;
+    color: white;
+    border: none;
+    margin: 15px 0 50px 0;
+}
