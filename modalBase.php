@@ -65,6 +65,7 @@ function getData($field)
     $stmt->execute();
     $result = $stmt->get_result();
     $rows = $result->fetch_all(MYSQLI_ASSOC);
+
     return $rows ?? [];
 }
 
@@ -72,34 +73,12 @@ function getData($field)
 function renderInputForm($field, $type = 'radio')
 {
 
-    global $conn, $presetData, $selected; // Sử dụng biến toàn cục
+    global $conn, $presetData, $selected, $selectFields; // Sử dụng biến toàn cục
     getSelectedValue();
 
     echo "<form id='" . htmlspecialchars($field) . "' method='POST'>";
-    // Truy vấn dữ liệu nếu trường là 'tema'
     $data = [];
-    // if ($field === 'tema') {
-    //     $sql = "SELECT `$field` FROM `preset` GROUP BY `$field`";
-    //     $result = $conn->query($sql);
-
-    //     if ($result) {
-    //         while ($row = $result->fetch_assoc()) {
-    //             $data[] = $row[$field];
-    //         }
-    //     } else {
-    //         echo "Lỗi truy vấn: " . htmlspecialchars($conn->error);
-    //         return;
-    //     }
-    // } else {
-
-    //     $dataAll = getData($field) ?? $presetData;
-    //     // Dữ liệu từ biến toàn cục nếu không phải 'tema'
-    //     foreach ($dataAll as $preset) {
-    //         $data[] = $preset[$field] ?? '';
-    //     }
-    // }
-
-    $data = [];
+    $dataKdg = [];
 
     $dataAll = ($field !== 'tema') ? getData($field) : null;
     
@@ -107,7 +86,8 @@ function renderInputForm($field, $type = 'radio')
         foreach ($dataAll as $preset) {
             $data[] = $preset[$field] ?? '';
         }
-    } else {
+    }
+    else {
         $sql = "SELECT `$field` FROM `preset` GROUP BY `$field`";
         $result = $conn->query($sql);
     
@@ -120,12 +100,17 @@ function renderInputForm($field, $type = 'radio')
             return;
         }
     }
-    
-    
-    
-
 
     // Loại bỏ các phần tử trùng lặp trong mảng
+
+
+    if (!empty($selectFields[0]["kdg"])) {
+        $dataKdg = extractTwoNumbers($selectFields[0]["kdg"]);
+    }
+    if ($field == 'cstd' && !empty($dataKdg)) {
+        // todo tôi muốn chỉ lấy các phần tử trong mảng data có đầu số giống $dataKdg
+        $data = filterDataByPrefix($data, $dataKdg);
+    }
     $data = array_unique($data);
 
     // Hiển thị các radio button
@@ -144,6 +129,20 @@ function renderInputForm($field, $type = 'radio')
     }
     echo "<input style='margin:10px 0 10px 20px' name='submit' type='submit' value='SUBMIT'>";
     echo "</form>";
+}
+function extractTwoNumbers(string $text): array {
+    preg_match_all('/\d+\.\d+/', $text, $matches);
+    return array_unique($matches[0]) ; // Lấy tối đa 2 phần tử đầu tiên
+}
+
+function filterDataByPrefix(array $data, array $prefixes): array {
+    return array_filter($data, function ($item) use ($prefixes) {
+        // Lấy số đầu tiên (dạng x.y) trong chuỗi
+        if (preg_match('/^\d+\.\d+/', $item, $match)) {
+            return in_array($match[0], $prefixes); // Kiểm tra nếu số đó có trong danh sách
+        }
+        return [];
+    });
 }
 
 ?>
