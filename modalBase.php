@@ -43,8 +43,8 @@ function getData($field)
     foreach ($filteredSelectFields as $key => $filteredSelectField) {
 
         $conditions[] = "$key = ?";
-        $cleaned_string = str_replace("/n", "", $filteredSelectField);
-        $value = preg_replace(['/\\n/', '/\\r/'], ['/n', '/r'], $cleaned_string);
+       // $cleaned_string = str_replace("/n", "", $filteredSelectField);
+        $value = preg_replace(['/\\n/', '/\\r/'], ['/n', '/r'], $filteredSelectField);
         $parameters[] = $value;
     }
 
@@ -81,7 +81,8 @@ function renderInputForm($field, $type = 'radio')
     $dataKdg = [];
 
     $dataAll = ($field !== 'tema') ? getData($field) : null;
-    
+
+
     if (!empty($dataAll)) {
         foreach ($dataAll as $preset) {
             $data[] = $preset[$field] ?? '';
@@ -108,25 +109,40 @@ function renderInputForm($field, $type = 'radio')
         $dataKdg = extractTwoNumbers($selectFields[0]["kdg"]);
     }
     if ($field == 'cstd' && !empty($dataKdg)) {
-        // todo tôi muốn chỉ lấy các phần tử trong mảng data có đầu số giống $dataKdg
-        $data = filterDataByPrefix($data, $dataKdg);
+
+        // Hiển thị các radio button
+        $parts = []; // Khởi tạo mảng rỗng
+        foreach ($data as $value) {
+            $parts = array_merge($parts, explode('/n', $value)); // Gộp kết quả vào $parts
+        }
+        $data = filterDataByPrefix($parts, $dataKdg);
+
     }
     $data = array_unique($data);
+
 
     // Hiển thị các radio button
     foreach ($data as $value) {
         if (!empty($value)) {
+            $parts = explode('/n', $value);
+            foreach ($parts as $part) {
+                $part = trim($part); // Loại bỏ khoảng trắng thừa
 
-            $value = preg_replace(['/\/n/', '/\/r/'], ["\n", "\r"], $value);
-            $normalized = preg_replace('/\s+/', ' ', str_replace(['<br>', '<br/>'], '', $selected));
-            $escapedValue = preg_replace('/\s+/', ' ', htmlspecialchars($value, ENT_QUOTES));
-            $isChecked = $normalized == $escapedValue ? 'checked' : ''; // Kiểm tra và gán 'checked' nếu đúng
+                // Chuẩn hóa dữ liệu so sánh
+                $escapedValue = preg_replace('/\s+/', ' ', htmlspecialchars($part, ENT_QUOTES));
+                $normalized = isset($selected) ? preg_replace('/\s+/', ' ', str_replace(['<br>', '<br/>'], '', htmlspecialchars($selected, ENT_QUOTES))) : '';
 
-            $html = "<input style='margin:20px 0 0 20px; float: left;' type='" . $type . "' name='" . htmlspecialchars($field) . "' value='" . nl2br(htmlspecialchars($value, ENT_QUOTES)) . "' $isChecked>";
-            $html .= "<span style='margin-left: 20px; float: left;'>" . nl2br(htmlspecialchars($value, ENT_QUOTES)) . "</span><br style='clear: both;'><br>";
-            echo $html;
+                $isChecked = $normalized === $escapedValue ? 'checked' : '';
+
+                // Tránh gọi nl2br nhiều lần
+                $displayText = nl2br(htmlspecialchars($part, ENT_QUOTES));
+                $html = "<input style='margin:20px 0 0 20px; float: left;' type='" . htmlspecialchars($type) . "' name='" . htmlspecialchars($field) . "' value='$displayText' $isChecked>";
+                $html .= "<span style='margin-left: 20px; float: left;'>$displayText</span><br style='clear: both;'><br>";
+                echo $html;
+            }
         }
     }
+
     echo "<input style='margin:10px 0 10px 20px' name='submit' type='submit' value='SUBMIT'>";
     echo "</form>";
 }
