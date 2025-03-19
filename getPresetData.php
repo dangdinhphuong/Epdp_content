@@ -19,7 +19,7 @@ foreach ($fields as $field) {
     if (!empty($_POST[$field])) {
         $conditions[] = "$field = ?";
         $cleaned_string = str_replace("/n", "", $_POST[$field]);
-        $value = preg_replace(['/\\n/', '/\\r/'], ['/n', '/r'], $cleaned_string);
+        $value = preg_replace(['/\\n/', '/\\r/'], ['/n', '/r'], $_POST[$field]);
         $parameters[] = $value;
     }
 }

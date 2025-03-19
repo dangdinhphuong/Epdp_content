@@ -53,7 +53,6 @@ function getData($field)
     if (!empty($conditions)) {
         $sql .= " WHERE " . implode(" AND ", $conditions);
     }
-
     $stmt = $conn->prepare($sql);
 
 
@@ -73,7 +72,7 @@ function getData($field)
 function renderInputForm($field, $type = 'radio')
 {
 
-    global $conn, $presetData, $selected, $selectFields; // Sử dụng biến toàn cục
+    global $conn, $presetData, $selected, $selectFields , $result; // Sử dụng biến toàn cục
     getSelectedValue();
 
     echo "<form id='" . htmlspecialchars($field) . "' method='POST'>";
@@ -104,10 +103,10 @@ function renderInputForm($field, $type = 'radio')
 
     // Loại bỏ các phần tử trùng lặp trong mảng
 
-
-    if (!empty($selectFields[0]["kdg"])) {
-        $dataKdg = extractTwoNumbers($selectFields[0]["kdg"]);
+    if (!empty($selectFields[$_GET["result"] ?? 0]["kdg"])) {
+        $dataKdg = extractTwoNumbers($selectFields[$_GET["result"] ?? 0]["kdg"]);
     }
+
     if ($field == 'cstd' && !empty($dataKdg)) {
 
         // Hiển thị các radio button
@@ -115,11 +114,12 @@ function renderInputForm($field, $type = 'radio')
         foreach ($data as $value) {
             $parts = array_merge($parts, explode('/n', $value)); // Gộp kết quả vào $parts
         }
+
         $data = filterDataByPrefix($parts, $dataKdg);
+
 
     }
     $data = array_unique($data);
-
 
     // Hiển thị các radio button
     foreach ($data as $value) {
