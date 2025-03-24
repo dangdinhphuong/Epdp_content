@@ -43,7 +43,7 @@ function getData($field)
     foreach ($filteredSelectFields as $key => $filteredSelectField) {
 
         $conditions[] = "$key = ?";
-       // $cleaned_string = str_replace("/n", "", $filteredSelectField);
+        // $cleaned_string = str_replace("/n", "", $filteredSelectField);
         $value = preg_replace(['/\\n/', '/\\r/'], ['/n', '/r'], $filteredSelectField);
         $parameters[] = $value;
     }
@@ -72,7 +72,7 @@ function getData($field)
 function renderInputForm($field, $type = 'radio')
 {
 
-    global $conn, $presetData, $selected, $selectFields , $result; // Sử dụng biến toàn cục
+    global $conn, $presetData, $selected, $selectFields, $result; // Sử dụng biến toàn cục
     getSelectedValue();
 
     echo "<form id='" . htmlspecialchars($field) . "' method='POST'>";
@@ -86,11 +86,10 @@ function renderInputForm($field, $type = 'radio')
         foreach ($dataAll as $preset) {
             $data[] = $preset[$field] ?? '';
         }
-    }
-    else {
+    } else {
         $sql = "SELECT `$field` FROM `preset` GROUP BY `$field`";
         $result = $conn->query($sql);
-    
+
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $data[] = $row[$field];
@@ -116,11 +115,14 @@ function renderInputForm($field, $type = 'radio')
         }
 
         $data = filterDataByPrefix($parts, $dataKdg);
+//        echo"<pre>";  var_dump($data);
+        $data = sortDataByPrefix($data);
 
 
     }
     $data = array_unique($data);
-
+//    var_dump($data); 教师提问问题激发学生兴趣，”你们来到学校有没有认识好朋友、好同学呀？”
+//    echo"</pre>"; die;
     // Hiển thị các radio button
     foreach ($data as $value) {
         if (!empty($value)) {
@@ -146,12 +148,15 @@ function renderInputForm($field, $type = 'radio')
     echo "<input style='margin:10px 0 10px 20px' name='submit' type='submit' value='SUBMIT'>";
     echo "</form>";
 }
-function extractTwoNumbers(string $text): array {
+
+function extractTwoNumbers(string $text): array
+{
     preg_match_all('/\d+\.\d+/', $text, $matches);
-    return array_unique($matches[0]) ; // Lấy tối đa 2 phần tử đầu tiên
+    return array_unique($matches[0]); // Lấy tối đa 2 phần tử đầu tiên
 }
 
-function filterDataByPrefix(array $data, array $prefixes): array {
+function filterDataByPrefix(array $data, array $prefixes): array
+{
     return array_filter($data, function ($item) use ($prefixes) {
         // Lấy số đầu tiên (dạng x.y) trong chuỗi
         if (preg_match('/^\d+\.\d+/', $item, $match)) {
@@ -160,5 +165,27 @@ function filterDataByPrefix(array $data, array $prefixes): array {
         return [];
     });
 }
+
+function sortDataByPrefix(array $data): array
+{
+    usort($data, function ($a, $b) {
+        // Lấy toàn bộ số đầu tiên có thể: 5.1.1, 5.1.2.3,...
+        preg_match('/^\d+(\.\d+)+/', $a, $matchA);
+        preg_match('/^\d+(\.\d+)+/', $b, $matchB);
+
+        // Nếu không tìm thấy, gán mặc định "0"
+        $numA = $matchA[0] ?? '0';
+        $numB = $matchB[0] ?? '0';
+
+        // Debug kiểm tra
+//        echo "Compare: {$numA} vs {$numB} <br>";
+
+        // Dùng version_compare() để so sánh đúng dạng số có nhiều cấp
+        return version_compare($numA, $numB);
+    });
+
+    return $data;
+}
+
 
 ?>
