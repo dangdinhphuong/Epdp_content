@@ -121,15 +121,17 @@ function renderInputForm($field, $type = 'radio')
 
     }
     $data = array_unique($data);
-//    var_dump($data); 教师提问问题激发学生兴趣，”你们来到学校有没有认识好朋友、好同学呀？”
+//    var_dump($data);
 //    echo"</pre>"; die;
+    $renderedParts = []; // Mảng lưu các phần tử đã render
     // Hiển thị các radio button
     foreach ($data as $value) {
         if (!empty($value)) {
             $parts = explode('/n', $value);
+            $parts = array_unique(array_map('trim', $parts));
             foreach ($parts as $part) {
-                $part = trim($part); // Loại bỏ khoảng trắng thừa
-
+                if (empty($part) || in_array($part, $renderedParts)) continue; // Bỏ qua nếu trống hoặc đã render
+                $renderedParts[] = $part;
                 // Chuẩn hóa dữ liệu so sánh
                 $escapedValue = preg_replace('/\s+/', ' ', htmlspecialchars($part, ENT_QUOTES));
                 $normalized = isset($selected) ? preg_replace('/\s+/', ' ', str_replace(['<br>', '<br/>'], '', htmlspecialchars($selected, ENT_QUOTES))) : '';
